@@ -19,4 +19,4 @@ Monorepo del proyecto fitness.
 ```bash
 cd backend
 npm install
-npm run start:devv
+npm run start:dev
