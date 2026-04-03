@@ -5,9 +5,54 @@
 
 generator client {
   provider = "prisma-client"
+  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum UserAgeGroup {
+  UNDER_18
+  BETWEEN_18_AND_30
+  OVER_30
+}
+
+enum UserGender {
+  MASCULINE
+  FEMININE
+}
+
+enum UserInterest {
+  LOSE_WEIGHT
+  BUILD_MUSCULE
+  IMPROVE_HEALTH
+  CALISTHENICS
+}
+
+enum UserLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+model User {
+  id                        String              @id @default(cuid())
+  email                     String              @unique
+  isProfileCompleted        Boolean             @default(false)
+  firstName                 String?
+  lastName                  String?
+  role                      UserRole
+  ageGroup                  UserAgeGroup?
+  gender                    UserGender?
+  interests                 UserInterest[]
+  level                     UserLevel?
+  lastLoginAt               DateTime?
+  createdAt                 DateTime            @default(now())
+  updatedAt                 DateTime            @updatedAt
 }
