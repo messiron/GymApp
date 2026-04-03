@@ -1,9 +1,10 @@
+import { PrismaService } from "src/shared/infrastructure/prisma/prisma.service";
 import { User } from "../../core/entities/user.entity";
 import { UserRepositoryPort } from "../../core/ports/output/user-repository.port";
-import { PrismaClient, UserInterest, UserRole } from "generated/prisma/client";
+import { UserInterest, UserRole } from "generated/prisma/client";
 
 export class PrismaUserRepository implements UserRepositoryPort {
-  constructor(private prisma: PrismaClient) {}
+  constructor(private prisma: PrismaService) {}
 
   async findById(id: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({ where: { id } });

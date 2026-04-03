@@ -4,9 +4,10 @@ import { FindUserUseCase } from './core/use-cases/find-user.use-case';
 import { FindUserByEmailUseCase } from './core/use-cases/find-user-by-email.use-case';
 import { UserRepositoryPort } from './core/ports/output/user-repository.port';
 import { PrismaUserRepository } from './infrastructure/repositories/prisma-user.repository';
+import { PrismaModule } from 'src/shared/infrastructure/prisma/prisma.module';
 
 @Module({
-  imports: [],
+  imports: [PrismaModule],
   providers: [
     CreateUserUseCase,
     FindUserUseCase,
