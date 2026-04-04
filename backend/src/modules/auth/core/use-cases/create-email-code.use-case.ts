@@ -24,6 +24,9 @@ export class CreateEmailCodeUseCase {
 
     console.log("➡️  Code to login:", code);
     await this.emailCodeRepository.create(newEmailCode);
-    return newEmailCode;
+    return {
+      message: "Code sent to email.",
+      email,
+    };
   }
 }

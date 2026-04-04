@@ -4,7 +4,7 @@ import { UserNotFoundError } from "src/modules/user/core/entities/errors/user-no
 import { DomainError } from "src/shared/core/errors/domain.error";
 
 @Catch(DomainError)
-export class UserDomainExceptionFilter implements ExceptionFilter {
+export class DomainExceptionFilter implements ExceptionFilter {
   catch(exception: DomainError, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
@@ -17,6 +17,8 @@ export class UserDomainExceptionFilter implements ExceptionFilter {
     const status = errorMap.get(exception.constructor as any) ?? HttpStatus.INTERNAL_SERVER_ERROR;
 
     response.status(status).json({
+      status: "error",
+      code: exception.code,
       message: exception.message,
     });
   }
