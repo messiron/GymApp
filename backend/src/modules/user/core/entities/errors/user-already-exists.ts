@@ -1,7 +1,7 @@
-import { UserDomainError } from "../user-domain.error";
+import { DomainError } from "src/shared/core/errors/domain.error";
 
-export class UserAlreadyExistsError extends UserDomainError {
+export class UserAlreadyExistsError extends DomainError {
   constructor() {
-    super("User already exists.");
+    super("User already exists.", "USER_ALREADY_EXISTS");
   }
 }

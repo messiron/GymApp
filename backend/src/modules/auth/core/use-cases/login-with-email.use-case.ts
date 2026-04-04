@@ -1,5 +1,5 @@
 import { Inject } from "@nestjs/common";
-import { User } from "src/modules/user/core/entities/user.entity";
+import { UserNotFoundError } from "src/modules/user/core/entities/errors/user-not-found.error";
 import { CreateUserUseCase } from "src/modules/user/core/use-cases/create-user.use-case";
 import { FindUserByEmailUseCase } from "src/modules/user/core/use-cases/find-user-by-email.use-case";
 
@@ -11,12 +11,15 @@ export class LoginWithEmailUseCase {
     private readonly findUserByEmailUseCase: FindUserByEmailUseCase
   ) {}
 
-  async execute(email: string): Promise<User> {
+  async execute(email: string) {
     try {
       const user = await this.findUserByEmailUseCase.execute(email);
       return user;
-    } catch (e) {
-      return await this.createUserUseCase.execute(email);
+    } catch (error) {
+      if (error instanceof UserNotFoundError) {
+        return await this.createUserUseCase.execute(email);
+      }
+      throw error;
     }
   }
 }
