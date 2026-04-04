@@ -1,5 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpStatus } from "@nestjs/common";
 import { UserAlreadyExistsError } from "src/modules/user/core/entities/errors/user-already-exists.error";
+import { UserInvalidEmailError } from "src/modules/user/core/entities/errors/user-invalid-email.error";
 import { UserNotFoundError } from "src/modules/user/core/entities/errors/user-not-found.error";
 import { DomainError } from "src/shared/core/errors/domain.error";
 
@@ -12,6 +13,7 @@ export class DomainExceptionFilter implements ExceptionFilter {
     const errorMap = new Map([
       [UserNotFoundError, HttpStatus.NOT_FOUND],
       [UserAlreadyExistsError, HttpStatus.BAD_REQUEST],
+      [UserInvalidEmailError, HttpStatus.BAD_REQUEST]
     ]);
 
     const status = errorMap.get(exception.constructor as any) ?? HttpStatus.INTERNAL_SERVER_ERROR;

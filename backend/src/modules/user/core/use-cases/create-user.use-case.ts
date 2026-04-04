@@ -3,6 +3,7 @@ import { User } from "../entities/user.entity";
 import { UserRepositoryPort } from "../ports/output/user-repository.port";
 import { Inject } from "@nestjs/common";
 import { UserAlreadyExistsError } from "../entities/errors/user-already-exists.error";
+import { UserInvalidEmailError } from "../entities/errors/user-invalid-email.error";
 
 export class CreateUserUseCase {
   constructor(
@@ -13,6 +14,7 @@ export class CreateUserUseCase {
   async execute(email: string): Promise<User> {
     const user = await this.userRepository.findByEmail(email);
 
+    if (!User.validEmail(email)) throw new UserInvalidEmailError();
     if (user) throw new UserAlreadyExistsError();
 
     const newUser = new User(
