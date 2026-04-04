@@ -2,7 +2,9 @@ import { PrismaService } from "src/shared/infrastructure/prisma/prisma.service";
 import { User } from "../../core/entities/user.entity";
 import { UserRepositoryPort } from "../../core/ports/output/user-repository.port";
 import { UserInterest, UserRole } from "generated/prisma/client";
+import { Injectable } from "@nestjs/common";
 
+@Injectable()
 export class PrismaUserRepository implements UserRepositoryPort {
   constructor(private prisma: PrismaService) {}
 

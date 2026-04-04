@@ -21,6 +21,7 @@ import { PrismaModule } from 'src/shared/infrastructure/prisma/prisma.module';
     CreateUserUseCase,
     FindUserUseCase,
     FindUserByEmailUseCase,
+    UserRepositoryPort,
   ]
 })
 export class UserModule {}

@@ -1,10 +1,13 @@
 import { UserRole } from "generated/prisma/enums";
 import { User } from "../entities/user.entity";
 import { UserRepositoryPort } from "../ports/output/user-repository.port";
-
+import { Inject } from "@nestjs/common";
 
 export class CreateUserUseCase {
-  constructor(private userRepository: UserRepositoryPort) {}
+  constructor(
+    @Inject(UserRepositoryPort)
+    private readonly userRepository: UserRepositoryPort
+  ) {}
 
   async execute(email: string): Promise<User> {
     const user = await this.userRepository.findByEmail(email);
