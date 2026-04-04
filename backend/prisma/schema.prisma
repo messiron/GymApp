@@ -65,3 +65,9 @@ model EmailCode {
   expires        Int              // In minutes
   createdAt      DateTime              @default(now())
 }
+
+model refresh_tokens {
+  id             String              @id @default(cuid())
+  user_id        String
+  token          String
+}
