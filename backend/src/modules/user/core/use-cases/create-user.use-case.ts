@@ -2,7 +2,7 @@ import { UserRole } from "generated/prisma/enums";
 import { User } from "../entities/user.entity";
 import { UserRepositoryPort } from "../ports/output/user-repository.port";
 import { Inject } from "@nestjs/common";
-import { UserAlreadyExistsError } from "../entities/errors/user-already-exists";
+import { UserAlreadyExistsError } from "../entities/errors/user-already-exists.error";
 
 export class CreateUserUseCase {
   constructor(

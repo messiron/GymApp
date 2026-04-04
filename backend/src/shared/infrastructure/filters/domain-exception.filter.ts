@@ -1,5 +1,5 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpStatus } from "@nestjs/common";
-import { UserAlreadyExistsError } from "src/modules/user/core/entities/errors/user-already-exists";
+import { UserAlreadyExistsError } from "src/modules/user/core/entities/errors/user-already-exists.error";
 import { UserNotFoundError } from "src/modules/user/core/entities/errors/user-not-found.error";
 import { DomainError } from "src/shared/core/errors/domain.error";
 
