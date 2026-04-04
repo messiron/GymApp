@@ -36,4 +36,8 @@ export class PrismaEmailCodeRepository implements EmailCodeRepositoryPort {
   async delete(id: string): Promise<void> {
     await this.prisma.emailCode.delete({ where: { id } });
   }
+
+  async deleteByEmail(email: string): Promise<void> {
+    await this.prisma.emailCode.delete({ where: { email } });
+  }
 }
