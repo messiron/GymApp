@@ -2,6 +2,7 @@ import { UserRole } from "generated/prisma/enums";
 import { User } from "../entities/user.entity";
 import { UserRepositoryPort } from "../ports/output/user-repository.port";
 import { Inject } from "@nestjs/common";
+import { UserAlreadyExistsError } from "../entities/errors/user-already-exists";
 
 export class CreateUserUseCase {
   constructor(
@@ -12,7 +13,7 @@ export class CreateUserUseCase {
   async execute(email: string): Promise<User> {
     const user = await this.userRepository.findByEmail(email);
 
-    if (user) throw new Error("User already exists.");
+    if (user) throw new UserAlreadyExistsError();
 
     const newUser = new User(
       crypto.randomUUID(),
