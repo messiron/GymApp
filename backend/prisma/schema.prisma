@@ -66,8 +66,8 @@ model EmailCode {
   createdAt      DateTime              @default(now())
 }
 
-model refresh_tokens {
-  id             String              @id @default(cuid())
-  user_id        String
+model invalid_refresh_tokens {
+  id             Int              @id @default(autoincrement())
   token          String
+  expiresAt      DateTime
 }
