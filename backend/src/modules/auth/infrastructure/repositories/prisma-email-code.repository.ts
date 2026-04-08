@@ -1,11 +1,11 @@
-import { EmailCodeRepositoryPort } from "../../core/ports/output/email-code-repository.port";
-import { PrismaService } from "src/shared/infrastructure/prisma/prisma.service";
-import { EmailCode } from "../../core/entities/email-code.entity";
-import { Injectable } from "@nestjs/common";
+import { EmailCodeRepositoryPort } from '../../core/ports/output/email-code-repository.port';
+import { PrismaService } from 'src/shared/infrastructure/prisma/prisma.service';
+import { EmailCode } from '../../core/entities/email-code.entity';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class PrismaEmailCodeRepository implements EmailCodeRepositoryPort {
-  constructor (private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(emailCode: EmailCode): Promise<void> {
     await this.prisma.emailCode.create({
@@ -14,9 +14,9 @@ export class PrismaEmailCodeRepository implements EmailCodeRepositoryPort {
         email: emailCode.email,
         code: emailCode.code,
         expires: emailCode.expiresAt,
-        createdAt: emailCode.createdAt
-      }
-    })
+        createdAt: emailCode.createdAt,
+      },
+    });
   }
 
   async findByEmail(email: string): Promise<EmailCode | null> {
@@ -29,7 +29,7 @@ export class PrismaEmailCodeRepository implements EmailCodeRepositoryPort {
       code.email,
       code.code,
       code.expires,
-      code.createdAt
+      code.createdAt,
     );
   }
 
