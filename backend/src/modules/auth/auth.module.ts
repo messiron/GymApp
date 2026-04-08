@@ -10,6 +10,8 @@ import { CreateUserUseCase } from "../user/core/use-cases/create-user.use-case";
 import { FindUserByEmailUseCase } from "../user/core/use-cases/find-user-by-email.use-case";
 import { UserModule } from "../user/user.module";
 import { LoginWithEmailUseCase } from "./core/use-cases/login-with-email.use-case";
+import { InvalidRefreshTokenRepositoryPort } from "./core/ports/output/invalid-refresh-token-repository.port";
+import { PrismaInvalidRefreshTokenRepository } from "./infrastructure/repositories/prisma-invalid-refresh-token.repository";
 
 @Module({
   imports: [
@@ -27,7 +29,11 @@ import { LoginWithEmailUseCase } from "./core/use-cases/login-with-email.use-cas
     {
       provide: EmailCodeRepositoryPort,
       useClass: PrismaEmailCodeRepository
-    }
+    },
+    {
+      provide: InvalidRefreshTokenRepositoryPort,
+      useClass: PrismaInvalidRefreshTokenRepository
+    },
   ],
 })
 export class AuthModule {}
