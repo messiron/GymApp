@@ -24,8 +24,6 @@ import { PrismaInvalidRefreshTokenRepository } from "./infrastructure/repositori
     ValidateEmailCodeUseCase,
     EmailCodeStrategy,
     LoginWithEmailUseCase,
-    CreateUserUseCase,
-    FindUserByEmailUseCase,
     {
       provide: EmailCodeRepositoryPort,
       useClass: PrismaEmailCodeRepository
