@@ -1,11 +1,8 @@
 import { Inject } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { InvalidRefreshTokenRepositoryPort } from "../ports/output/invalid-refresh-token-repository.port";
 
 export class GenerateTokensUseCase {
   constructor(
-    @Inject(InvalidRefreshTokenRepositoryPort)
-    private readonly invalidRefreshTokenRepository: InvalidRefreshTokenRepositoryPort,
     @Inject(JwtService)
     private readonly jwtService: JwtService
   ) {}
