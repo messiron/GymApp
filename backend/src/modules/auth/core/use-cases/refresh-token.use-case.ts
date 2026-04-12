@@ -1,4 +1,4 @@
-import { Inject, UnauthorizedException } from "@nestjs/common";
+import { Inject } from "@nestjs/common";
 import { GenerateTokensUseCase } from "./generate-tokens.use-case";
 import { InvalidRefreshTokenRepositoryPort } from "../ports/output/invalid-refresh-token-repository.port";
 import { JsonWebTokenError, JwtService, TokenExpiredError as JwtExpiredError } from "@nestjs/jwt";
