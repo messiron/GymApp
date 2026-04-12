@@ -1,7 +1,8 @@
 import { PrismaService } from "src/shared/infrastructure/prisma/prisma.service";
 import { User } from "../../core/entities/user.entity";
 import { UserRepositoryPort } from "../../core/ports/output/user-repository.port";
-import { UserInterest, UserRole } from "generated/prisma/client";
+import { UserAgeGroup, UserInterest, UserRole, UserGender, UserLevel } from "../../core/enums/user-data.enum";
+import { User as UserDB } from "generated/prisma/browser";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
@@ -13,21 +14,7 @@ export class PrismaUserRepository implements UserRepositoryPort {
 
     if (!user) return null;
 
-    return new User(
-      user.id,
-      user.email,
-      user.isProfileCompleted,
-      user.firstName,
-      user.lastName,
-      user.role,
-      user.ageGroup,
-      user.gender,
-      user.interests,
-      user.level,
-      user.lastLoginAt,
-      user.createdAt,
-      user.updatedAt
-    );
+    return this.transformUserToObject(user);
   }
 
   async findByEmail(email: string): Promise<User | null> {
@@ -35,21 +22,7 @@ export class PrismaUserRepository implements UserRepositoryPort {
 
     if (!user) return null;
 
-    return new User(
-      user.id,
-      user.email,
-      user.isProfileCompleted,
-      user.firstName,
-      user.lastName,
-      user.role,
-      user.ageGroup,
-      user.gender,
-      user.interests,
-      user.level,
-      user.lastLoginAt,
-      user.createdAt,
-      user.updatedAt
-    );
+    return this.transformUserToObject(user);
   }
 
   async create(id: string, email: string): Promise<void> {
@@ -91,5 +64,29 @@ export class PrismaUserRepository implements UserRepositoryPort {
         lastLoginAt: new Date()
       }
     });
+  }
+
+  private transformUserToObject(userDB: UserDB): User {
+    const role = UserRole[userDB.role];
+    const ageGroup = !userDB.ageGroup ? null : UserAgeGroup[userDB.ageGroup];
+    const gender = !userDB.gender ? null : UserGender[userDB.gender];
+    const interest = userDB.interests.map(v => UserInterest[v]);
+    const level = !userDB.level ? null : UserLevel[userDB.level];
+
+    return new User(
+      userDB.id,
+      userDB.email,
+      userDB.isProfileCompleted,
+      userDB.firstName,
+      userDB.lastName,
+      role,
+      ageGroup,
+      gender,
+      interest,
+      level,
+      userDB.lastLoginAt,
+      userDB.createdAt,
+      userDB.updatedAt
+    );
   }
 }

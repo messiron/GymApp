@@ -1,10 +1,10 @@
-import { UserAgeGroup, UserGender, UserInterest, UserLevel, UserRole } from "generated/prisma/enums";
+import { UserAgeGroup, UserGender, UserInterest, UserLevel, UserRole } from "../enums/user-data.enum";
 
 export class User {
   constructor(
     public readonly id: string,
     public readonly email: string,
-    public readonly isProfileCompleted: boolean,
+    public isProfileCompleted: boolean,
     public readonly firstName: string | null,
     public readonly lastName: string | null,
     public readonly role: UserRole,
@@ -17,17 +17,19 @@ export class User {
     public readonly updatedAt: Date | null,
   ) {}
 
-  isCompleted(): Boolean {
+  isCompleted() {
     if (
       this.firstName && 
-      this.lastName && 
       this.ageGroup && 
       this.gender && 
       this.interests &&
       this.level
-    ) return true;
-    
-    return false;
+    ){
+      this.isProfileCompleted = true;
+    }
+    else {
+      this.isProfileCompleted = false;
+    }
   }
 
   static validEmail(email: string): boolean {

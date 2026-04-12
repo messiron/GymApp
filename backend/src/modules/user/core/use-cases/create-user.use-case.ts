@@ -1,4 +1,4 @@
-import { UserRole } from "generated/prisma/enums";
+import { UserRole } from "../enums/user-data.enum";
 import { User } from "../entities/user.entity";
 import { UserRepositoryPort } from "../ports/output/user-repository.port";
 import { Inject } from "@nestjs/common";
