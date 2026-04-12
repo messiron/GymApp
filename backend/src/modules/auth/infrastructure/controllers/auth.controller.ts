@@ -3,18 +3,17 @@ import { CreateEmailCodeUseCase } from "../../core/use-cases/create-email-code.u
 import { EmailDto } from "../dtos/email.dto";
 import { AuthGuard } from "@nestjs/passport";
 import { LoginWithEmailUseCase } from "../../core/use-cases/login-with-email.use-case";
-import { RefreshTokenUseCase } from "../../core/use-cases/refresh-token.use-case";
-import { RefreshDto } from "../dtos/refresh.dto";
 import { JwtAuthGuard } from "../guards/jwt-auth.guard";
 import { FindUserUseCase } from "src/modules/user/core/use-cases/find-user.use-case";
+import { GenerateTokensUseCase } from "../../core/use-cases/generate-tokens.use-case";
 
 @Controller("api/auth")
 export class AuthController {
   constructor (
     private readonly createEmailCodeUseCase: CreateEmailCodeUseCase,
     private readonly loginWithEmailUseCase: LoginWithEmailUseCase,
-    private readonly refreshTokenUseCase: RefreshTokenUseCase,
-    private readonly findUserUseCase: FindUserUseCase
+    private readonly findUserUseCase: FindUserUseCase,
+    private readonly generateTokensUseCase: GenerateTokensUseCase
   ) {}
 
   @Post("send-code")
@@ -31,13 +30,21 @@ export class AuthController {
   }
 
   @Post("refresh")
-  async refreshToken(@Body() refreshDto: RefreshDto) {
-    return await this.refreshTokenUseCase.execute(refreshDto.token);
+  @UseGuards(AuthGuard("refresh-token"))
+  async refreshToken(@Req() req) {
+    const data = req.user;
+    return await this.generateTokensUseCase.execute(data.id, data.email);
   }
 
   @Get("profile")
   @UseGuards(JwtAuthGuard)
   async getProfile(@Req() req) {
     return await this.findUserUseCase.execute(req.user.sub);
+  }
+
+  @Post("logout")
+  @UseGuards(AuthGuard("refresh-token"))
+  logout() {
+    return { message: "Logout successfully" }
   }
 }

@@ -12,7 +12,8 @@ import { InvalidRefreshTokenRepositoryPort } from "./core/ports/output/invalid-r
 import { PrismaInvalidRefreshTokenRepository } from "./infrastructure/repositories/prisma-invalid-refresh-token.repository";
 import { GenerateTokensUseCase } from "./core/use-cases/generate-tokens.use-case";
 import { JwtModule } from "@nestjs/jwt";
-import { RefreshTokenUseCase } from "./core/use-cases/refresh-token.use-case";
+import { RefreshTokenStrategy } from "./infrastructure/strategies/refresh-token.strategy";
+import { ValidateRefreshTokenUseCase } from "./core/use-cases/validate-refresh-token.use-case";
 
 @Module({
   imports: [
@@ -30,7 +31,8 @@ import { RefreshTokenUseCase } from "./core/use-cases/refresh-token.use-case";
     EmailCodeStrategy,
     LoginWithEmailUseCase,
     GenerateTokensUseCase,
-    RefreshTokenUseCase,
+    RefreshTokenStrategy,
+    ValidateRefreshTokenUseCase,
     {
       provide: EmailCodeRepositoryPort,
       useClass: PrismaEmailCodeRepository
