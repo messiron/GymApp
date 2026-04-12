@@ -5,6 +5,7 @@ import { FindUserByEmailUseCase } from './core/use-cases/find-user-by-email.use-
 import { UserRepositoryPort } from './core/ports/output/user-repository.port';
 import { PrismaUserRepository } from './infrastructure/repositories/prisma-user.repository';
 import { PrismaModule } from 'src/shared/infrastructure/prisma/prisma.module';
+import { UpdateLastLoginUseCase } from './core/use-cases/update-last-login.use-case';
 
 @Module({
   imports: [PrismaModule],
@@ -12,6 +13,7 @@ import { PrismaModule } from 'src/shared/infrastructure/prisma/prisma.module';
     CreateUserUseCase,
     FindUserUseCase,
     FindUserByEmailUseCase,
+    UpdateLastLoginUseCase,
     {
       provide: UserRepositoryPort,
       useClass: PrismaUserRepository
@@ -22,6 +24,7 @@ import { PrismaModule } from 'src/shared/infrastructure/prisma/prisma.module';
     FindUserUseCase,
     FindUserByEmailUseCase,
     UserRepositoryPort,
+    UpdateLastLoginUseCase,
   ]
 })
 export class UserModule {}

@@ -4,6 +4,7 @@ import { CreateUserUseCase } from "src/modules/user/core/use-cases/create-user.u
 import { FindUserByEmailUseCase } from "src/modules/user/core/use-cases/find-user-by-email.use-case";
 import { EmailCodeRepositoryPort } from "../ports/output/email-code-repository.port";
 import { GenerateTokensUseCase } from "./generate-tokens.use-case";
+import { UpdateLastLoginUseCase } from "src/modules/user/core/use-cases/update-last-login.use-case";
 
 export class LoginWithEmailUseCase {
   constructor(
@@ -14,7 +15,9 @@ export class LoginWithEmailUseCase {
     @Inject(EmailCodeRepositoryPort)
     private readonly emailCodeRepository: EmailCodeRepositoryPort,
     @Inject(GenerateTokensUseCase)
-    private readonly generateTokensUseCase: GenerateTokensUseCase
+    private readonly generateTokensUseCase: GenerateTokensUseCase,
+    @Inject(UpdateLastLoginUseCase)
+    private readonly updateLastLoginUseCase: UpdateLastLoginUseCase
   ) {}
 
   async execute(email: string) {
@@ -22,6 +25,8 @@ export class LoginWithEmailUseCase {
       const user = await this.findUserByEmailUseCase.execute(email);
       await this.emailCodeRepository.deleteByEmail(email);
       const tokens = await this.generateTokensUseCase.execute(user.id, user.email);
+
+      await this.updateLastLoginUseCase.execute(user.id);
       return {
         tokens,
         data: user,
@@ -31,6 +36,8 @@ export class LoginWithEmailUseCase {
         await this.emailCodeRepository.deleteByEmail(email);
         const newUser = await this.createUserUseCase.execute(email);
         const tokens = await this.generateTokensUseCase.execute(newUser.id, newUser.email);
+
+        await this.updateLastLoginUseCase.execute(newUser.id);
         return {
           tokens,
           data: newUser,

@@ -6,4 +6,5 @@ export abstract class UserRepositoryPort {
   abstract create(id: string, email: string): Promise<void>;
   abstract update(user: User): Promise<void>;
   abstract delete(id: string): Promise<void>;
+  abstract updateLogin(id: string): Promise<void>;
 }

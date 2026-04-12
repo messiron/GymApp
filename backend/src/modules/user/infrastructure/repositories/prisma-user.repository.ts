@@ -83,4 +83,13 @@ export class PrismaUserRepository implements UserRepositoryPort {
       where: { id },
     });
   }
+
+  async updateLogin(id: string): Promise<void> {
+    await this.prisma.user.update({
+      where: { id },
+      data: {
+        lastLoginAt: new Date()
+      }
+    });
+  }
 }
