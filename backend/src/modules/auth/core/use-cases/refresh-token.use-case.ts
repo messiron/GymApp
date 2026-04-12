@@ -1,9 +1,11 @@
 import { Inject, UnauthorizedException } from "@nestjs/common";
 import { GenerateTokensUseCase } from "./generate-tokens.use-case";
 import { InvalidRefreshTokenRepositoryPort } from "../ports/output/invalid-refresh-token-repository.port";
-import { JsonWebTokenError, JwtService, TokenExpiredError } from "@nestjs/jwt";
+import { JsonWebTokenError, JwtService, TokenExpiredError as JwtExpiredError } from "@nestjs/jwt";
 import { FindUserUseCase } from "src/modules/user/core/use-cases/find-user.use-case";
 import { InvalidRefreshToken } from "../entities/invalid-refresh-token.entity";
+import { InvalidTokenError } from "../entities/errors/invalid-token.error";
+import { TokenExpiredError } from "../entities/errors/token-expired.error";
 
 export class RefreshTokenUseCase {
   constructor(
@@ -24,7 +26,7 @@ export class RefreshTokenUseCase {
         { secret: process.env.REFRESH_TOKEN_SECRET }
       );
       const isInvalid = await this.invalidRefreshTokenRepository.findByToken(token);
-      if (isInvalid) return new JsonWebTokenError("token invalido");
+      if (isInvalid) throw new InvalidTokenError();
 
       await this.invalidRefreshTokenRepository.create(new InvalidRefreshToken(
         null,
@@ -37,8 +39,8 @@ export class RefreshTokenUseCase {
 
       return tokens;
     } catch (error) {
-      if (error instanceof JsonWebTokenError) return new UnauthorizedException("Token invalido");
-      else if (error instanceof TokenExpiredError) return new UnauthorizedException("Token expirado");
+      if (error instanceof JsonWebTokenError) throw new InvalidTokenError();
+      else if (error instanceof JwtExpiredError) throw new TokenExpiredError();
 
       throw error;
     }
