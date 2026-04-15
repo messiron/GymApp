@@ -1,6 +1,7 @@
-import { Body, Controller, Param, Patch } from "@nestjs/common";
+import { Body, Controller, Patch, Req, UseGuards } from "@nestjs/common";
 import { UpdateUserDto } from "../dtos/update-user.dto";
 import { UpdateUserDataUseCase } from "../../core/use-cases/update-user-data.use-case";
+import { AuthAccessTokenGuard } from "src/shared/infrastructure/guards/auth-access-token.guard";
 
 @Controller("api/user")
 export class UserController {
@@ -8,10 +9,11 @@ export class UserController {
     private readonly updateUserDataUseCase: UpdateUserDataUseCase
   ) {}
   
-  @Patch(":id")
-  update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
+  @Patch()
+  @UseGuards(AuthAccessTokenGuard)
+  update(@Req() req, @Body() updateUserDto: UpdateUserDto) {
     return this.updateUserDataUseCase.execute({
-      id,
+      id: req.user.sub,
       firstName: updateUserDto.firstName,
       lastName: updateUserDto.lastName,
       ageGroup: updateUserDto.ageGroup,

@@ -3,7 +3,7 @@ import { CreateEmailCodeUseCase } from "../../core/use-cases/create-email-code.u
 import { EmailDto } from "../dtos/email.dto";
 import { AuthGuard } from "@nestjs/passport";
 import { LoginWithEmailUseCase } from "../../core/use-cases/login-with-email.use-case";
-import { JwtAuthGuard } from "../guards/jwt-auth.guard";
+import { AuthAccessTokenGuard } from "src/shared/infrastructure/guards/auth-access-token.guard";
 import { FindUserUseCase } from "src/modules/user/core/use-cases/find-user.use-case";
 import { GenerateTokensUseCase } from "../../core/use-cases/generate-tokens.use-case";
 
@@ -37,7 +37,7 @@ export class AuthController {
   }
 
   @Get("profile")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthAccessTokenGuard)
   async getProfile(@Req() req) {
     return await this.findUserUseCase.execute(req.user.sub);
   }

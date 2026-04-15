@@ -8,9 +8,16 @@ import { PrismaModule } from 'src/shared/infrastructure/prisma/prisma.module';
 import { UpdateLastLoginUseCase } from './core/use-cases/update-last-login.use-case';
 import { UpdateUserDataUseCase } from './core/use-cases/update-user-data.use-case';
 import { UserController } from './infrastructure/controller/user.controller';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [
+    PrismaModule,
+    JwtModule.register({
+      secret: process.env.ACCESS_TOKEN_SECRET,
+      signOptions: { expiresIn: "15m" },
+    }),
+  ],
   providers: [
     CreateUserUseCase,
     FindUserUseCase,

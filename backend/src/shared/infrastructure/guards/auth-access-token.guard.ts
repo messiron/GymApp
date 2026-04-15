@@ -1,10 +1,10 @@
 import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { JsonWebTokenError, JwtService, TokenExpiredError as JwtExpiredError } from "@nestjs/jwt";
-import { InvalidTokenError } from "../../core/entities/errors/invalid-token.error";
-import { TokenExpiredError } from "../../core/entities/errors/token-expired.error";
+import { InvalidTokenError } from "src/modules/auth/core/entities/errors/invalid-token.error";
+import { TokenExpiredError } from "src/modules/auth/core/entities/errors/token-expired.error";
 
 @Injectable()
-export class JwtAuthGuard implements CanActivate {
+export class AuthAccessTokenGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService
   ) {}
