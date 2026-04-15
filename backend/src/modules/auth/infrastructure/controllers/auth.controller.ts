@@ -6,7 +6,9 @@ import { LoginWithEmailUseCase } from "../../core/use-cases/login-with-email.use
 import { AuthAccessTokenGuard } from "src/shared/infrastructure/guards/auth-access-token.guard";
 import { FindUserUseCase } from "src/modules/user/core/use-cases/find-user.use-case";
 import { GenerateTokensUseCase } from "../../core/use-cases/generate-tokens.use-case";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
+@ApiTags("auth")
 @Controller("api/auth")
 export class AuthController {
   constructor (
@@ -37,6 +39,7 @@ export class AuthController {
   }
 
   @Get("profile")
+  @ApiBearerAuth()
   @UseGuards(AuthAccessTokenGuard)
   async getProfile(@Req() req) {
     return await this.findUserUseCase.execute(req.user.sub);
