@@ -24,7 +24,7 @@ export class LoginWithEmailUseCase {
     try {
       const user = await this.findUserByEmailUseCase.execute(email);
       await this.emailCodeRepository.deleteByEmail(email);
-      const tokens = await this.generateTokensUseCase.execute(user.id, user.email);
+      const tokens = await this.generateTokensUseCase.execute(user.id, user.email, user.role);
 
       await this.updateLastLoginUseCase.execute(user.id);
       return {
@@ -35,7 +35,7 @@ export class LoginWithEmailUseCase {
       if (error instanceof UserNotFoundError) {
         await this.emailCodeRepository.deleteByEmail(email);
         const newUser = await this.createUserUseCase.execute(email);
-        const tokens = await this.generateTokensUseCase.execute(newUser.id, newUser.email);
+        const tokens = await this.generateTokensUseCase.execute(newUser.id, newUser.email, newUser.role);
 
         await this.updateLastLoginUseCase.execute(newUser.id);
         return {

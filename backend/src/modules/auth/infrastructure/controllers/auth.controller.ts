@@ -63,7 +63,7 @@ export class AuthController {
   @UseGuards(AuthGuard("refresh-token"))
   async refreshToken(@Req() req) {
     const data = req.user;
-    return await this.generateTokensUseCase.execute(data.id, data.email);
+    return await this.generateTokensUseCase.execute(data.id, data.email, data.role);
   }
 
   @Get("profile")

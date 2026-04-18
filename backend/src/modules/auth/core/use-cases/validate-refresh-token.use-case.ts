@@ -32,8 +32,8 @@ export class ValidateRefreshTokenUseCase {
         new Date(payload.exp * 1000)
       ));
 
-      const { id, email } = await this.findUserUseCase.execute(payload.sub);
-      return { id, email };
+      const { id, email, role } = await this.findUserUseCase.execute(payload.sub);
+      return { id, email, role };
     } catch (error) {
       if (error instanceof JsonWebTokenError) throw new InvalidTokenError();
       else if (error instanceof JwtTokenExpiredError) throw new TokenExpiredError();
