@@ -2,7 +2,7 @@ import { PrismaService } from "src/shared/infrastructure/prisma/prisma.service";
 import { User } from "../../core/entities/user.entity";
 import { UserRepositoryPort } from "../../core/ports/output/user-repository.port";
 import { UserAgeGroup, UserInterest, UserRole, UserGender, UserLevel } from "../../core/enums/user-data.enum";
-import { User as UserDB } from "generated/prisma/browser";
+import { User as UserDB } from "@prisma/client";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
