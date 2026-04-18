@@ -20,9 +20,3 @@ export enum UserInterest {
   IMPROVE_HEALTH = "IMPROVE_HEALTH",
   CALISTHENICS = "CALISTHENICS",
 }
-
-export enum UserLevel {
-  BEGINNER = "BEGINNER",
-  INTERMEDIATE = "INTERMEDIATE",
-  ADVANCED = "ADVANCED",
-}

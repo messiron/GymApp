@@ -1,4 +1,5 @@
-import { UserAgeGroup, UserGender, UserInterest, UserLevel, UserRole } from "../enums/user-data.enum";
+import { DifficultyLevel } from "src/shared/core/global.enum";
+import { UserAgeGroup, UserGender, UserInterest, UserRole } from "../enums/user-data.enum";
 
 export class User {
   constructor(
@@ -11,7 +12,7 @@ export class User {
     public readonly ageGroup: UserAgeGroup | null,
     public readonly gender: UserGender | null,
     public readonly interests: UserInterest[] | null,
-    public readonly level: UserLevel | null,
+    public readonly level: DifficultyLevel | null,
     public readonly lastLoginAt: Date | null,
     public readonly createdAt: Date,
     public readonly updatedAt: Date | null,

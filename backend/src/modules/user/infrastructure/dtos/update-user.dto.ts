@@ -8,8 +8,9 @@ import {
   ValidateNested
 } from "class-validator";
 
-import { UserAgeGroup, UserGender, UserInterest, UserLevel } from "../../core/enums/user-data.enum";
+import { UserAgeGroup, UserGender, UserInterest } from "../../core/enums/user-data.enum";
 import { Transform } from "class-transformer";
+import { DifficultyLevel } from "src/shared/core/global.enum";
 
 export class UpdateUserDto {
   @Transform(({ value }) => value.trim())
@@ -35,6 +36,6 @@ export class UpdateUserDto {
   @IsEnum(UserInterest, { each: true })
   interest: UserInterest[];
 
-  @IsEnum(UserLevel)
-  level: UserLevel;
+  @IsEnum(DifficultyLevel)
+  level: DifficultyLevel;
 }

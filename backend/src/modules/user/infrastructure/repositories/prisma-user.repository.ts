@@ -1,9 +1,10 @@
 import { PrismaService } from "src/shared/infrastructure/prisma/prisma.service";
 import { User } from "../../core/entities/user.entity";
 import { UserRepositoryPort } from "../../core/ports/output/user-repository.port";
-import { UserAgeGroup, UserInterest, UserRole, UserGender, UserLevel } from "../../core/enums/user-data.enum";
+import { UserAgeGroup, UserInterest, UserRole, UserGender } from "../../core/enums/user-data.enum";
 import { User as UserDB } from "@prisma/client";
 import { Injectable } from "@nestjs/common";
+import { DifficultyLevel } from "src/shared/core/global.enum";
 
 @Injectable()
 export class PrismaUserRepository implements UserRepositoryPort {
@@ -71,7 +72,7 @@ export class PrismaUserRepository implements UserRepositoryPort {
     const ageGroup = !userDB.ageGroup ? null : UserAgeGroup[userDB.ageGroup];
     const gender = !userDB.gender ? null : UserGender[userDB.gender];
     const interest = userDB.interests.map(v => UserInterest[v]);
-    const level = !userDB.level ? null : UserLevel[userDB.level];
+    const level = !userDB.level ? null : DifficultyLevel[userDB.level];
 
     return new User(
       userDB.id,

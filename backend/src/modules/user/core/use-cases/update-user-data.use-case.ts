@@ -2,7 +2,8 @@ import { Inject } from "@nestjs/common";
 import { UserRepositoryPort } from "../ports/output/user-repository.port";
 import { UserNotFoundError } from "../entities/errors/user-not-found.error";
 import { User } from "../entities/user.entity";
-import { UserAgeGroup, UserGender, UserInterest, UserLevel } from "../enums/user-data.enum";
+import { UserAgeGroup, UserGender, UserInterest } from "../enums/user-data.enum";
+import { DifficultyLevel } from "src/shared/core/global.enum";
 
 export class UpdateUserDataUseCase {
   constructor(
@@ -18,7 +19,7 @@ export class UpdateUserDataUseCase {
       ageGroup: UserAgeGroup,
       gender: UserGender,
       interest: UserInterest[],
-      level: UserLevel,
+      level: DifficultyLevel,
     }
   ) {
     const user = await this.userRepositoy.findById(data.id);
