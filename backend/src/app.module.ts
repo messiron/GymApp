@@ -5,6 +5,7 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { MuscleGroupModule } from './modules/muscle-group/muscle-group.module';
+import { ExerciseModule } from './modules/exercise/exercise.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { MuscleGroupModule } from './modules/muscle-group/muscle-group.module';
     UserModule,
     AuthModule,
     MuscleGroupModule,
+    ExerciseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
