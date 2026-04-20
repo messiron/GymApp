@@ -2,6 +2,7 @@ import { ArgumentsHost, Catch, ExceptionFilter, HttpStatus } from "@nestjs/commo
 import { EmailCodeInvalidError } from "src/modules/auth/core/entities/errors/emaill-code-invalid.error";
 import { InvalidTokenError } from "src/modules/auth/core/entities/errors/invalid-token.error";
 import { TokenExpiredError } from "src/modules/auth/core/entities/errors/token-expired.error";
+import { MuscleGroupNotFoundError } from "src/modules/muscle-group/core/entities/errors/muscle-group-not-found.error";
 import { UserAlreadyExistsError } from "src/modules/user/core/entities/errors/user-already-exists.error";
 import { UserInvalidEmailError } from "src/modules/user/core/entities/errors/user-invalid-email.error";
 import { UserNotFoundError } from "src/modules/user/core/entities/errors/user-not-found.error";
@@ -20,6 +21,7 @@ export class DomainExceptionFilter implements ExceptionFilter {
       [EmailCodeInvalidError, HttpStatus.UNAUTHORIZED],
       [InvalidTokenError, HttpStatus.UNAUTHORIZED],
       [TokenExpiredError, HttpStatus.UNAUTHORIZED],
+      [MuscleGroupNotFoundError, HttpStatus.NOT_FOUND]
     ]);
 
     const status = errorMap.get(exception.constructor as any) ?? HttpStatus.INTERNAL_SERVER_ERROR;
