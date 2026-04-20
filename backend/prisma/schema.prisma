@@ -52,6 +52,8 @@ model User {
   gender                    UserGender?
   interests                 UserInterest[]
   level                     DifficultyLevel?
+  routines                  Routine[]
+
   lastLoginAt               DateTime?
   createdAt                 DateTime            @default(now())
   updatedAt                 DateTime            @updatedAt
@@ -69,4 +71,54 @@ model invalid_refresh_tokens {
   id             Int              @id @default(autoincrement())
   token          String
   expiresAt      DateTime
+}
+
+model RoutineExercise {
+  id             Int              @id @default(autoincrement())
+  routineId      Int
+  exerciseId     Int
+  routines      Routine          @relation(fields: [routineId], references: [id], onDelete: Cascade)
+  exercises     Exercise         @relation(fields: [exerciseId], references: [id])
+
+  reps           Int
+  sets           Int
+  order          Int
+  weight         Float?
+
+  createdAt      DateTime         @default(now())
+}
+
+model Routine {
+  id             Int              @id @default(autoincrement())
+  title          String
+  description    String?
+  userId         String
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercises      RoutineExercise[]
+
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+}
+
+model Exercise {
+  id             Int              @id @default(autoincrement())
+  name           String
+  description    String?
+  example_gif    String?
+  timeForRep     Float
+  routine        RoutineExercise[]
+  muscleGroups   MuscleGroup[]    @relation("ExerciseMuscleGroup")
+
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+}
+
+model MuscleGroup {
+  id             Int              @id @default(autoincrement())
+  name           String
+  image_url      String?
+  exercises      Exercise[]       @relation("ExerciseMuscleGroup")
+
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
 }
