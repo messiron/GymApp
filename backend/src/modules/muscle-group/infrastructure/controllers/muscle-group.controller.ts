@@ -13,7 +13,7 @@ import { UserRole } from "src/modules/user/core/enums/user-data.enum";
 import { Role } from "src/shared/infrastructure/decorators/roles.decorator";
 
 @ApiTags("muscle group")
-@ApiBearerAuth("access token")
+@ApiBearerAuth()
 @Controller("api/muscle-group")
 @UseGuards(AuthAccessTokenGuard)
 export class MuscleGroupController {
