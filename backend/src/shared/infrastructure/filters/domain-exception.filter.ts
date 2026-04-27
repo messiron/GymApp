@@ -7,6 +7,7 @@ import { UserAlreadyExistsError } from "src/modules/user/core/entities/errors/us
 import { UserInvalidEmailError } from "src/modules/user/core/entities/errors/user-invalid-email.error";
 import { UserNotFoundError } from "src/modules/user/core/entities/errors/user-not-found.error";
 import { DomainError } from "src/shared/core/errors/domain.error";
+import { NotAuthorizedError } from "src/shared/core/errors/not-authorized.error";
 
 @Catch(DomainError)
 export class DomainExceptionFilter implements ExceptionFilter {
@@ -21,7 +22,8 @@ export class DomainExceptionFilter implements ExceptionFilter {
       [EmailCodeInvalidError, HttpStatus.UNAUTHORIZED],
       [InvalidTokenError, HttpStatus.UNAUTHORIZED],
       [TokenExpiredError, HttpStatus.UNAUTHORIZED],
-      [MuscleGroupNotFoundError, HttpStatus.NOT_FOUND]
+      [MuscleGroupNotFoundError, HttpStatus.NOT_FOUND],
+      [NotAuthorizedError, HttpStatus.FORBIDDEN]
     ]);
 
     const status = errorMap.get(exception.constructor as any) ?? HttpStatus.INTERNAL_SERVER_ERROR;
