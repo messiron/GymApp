@@ -1,7 +1,6 @@
 import { Module } from "@nestjs/common";
 import { AuthController } from "./infrastructure/controllers/auth.controller";
 import { CreateEmailCodeUseCase } from "./core/use-cases/create-email-code.use-case";
-import { PrismaModule } from "src/shared/infrastructure/prisma/prisma.module";
 import { EmailCodeRepositoryPort } from "./core/ports/output/email-code-repository.port";
 import { PrismaEmailCodeRepository } from "./infrastructure/repositories/prisma-email-code.repository";
 import { EmailCodeStrategy } from "./infrastructure/strategies/email-code.strategy";
@@ -17,7 +16,6 @@ import { ValidateRefreshTokenUseCase } from "./core/use-cases/validate-refresh-t
 
 @Module({
   imports: [
-    PrismaModule,
     UserModule,
     JwtModule.register({
       secret: process.env.REFRESH_TOKEN_SECRET,
