@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { CreateMuscleGroupUseCase } from "../../core/use-cases/create-muscle-group.use-case";
 import { FindAllMuscleGroupsUseCase } from "../../core/use-cases/find-all-muscle-groups.use-case";
@@ -11,6 +11,8 @@ import { AuthAccessTokenGuard } from "src/shared/infrastructure/guards/auth-acce
 import { RoleGuard } from "src/shared/infrastructure/guards/role.guard";
 import { UserRole } from "src/modules/user/core/enums/user-data.enum";
 import { Role } from "src/shared/infrastructure/decorators/roles.decorator";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { memoryStorage } from "multer";
 
 @ApiTags("muscle group")
 @ApiBearerAuth()
@@ -38,8 +40,16 @@ export class MuscleGroupController {
   @UseGuards(RoleGuard)
   @Role(UserRole.ADMIN)
   @Post()
-  create(@Body() createMuscleGroupDto: CreateMuscleGroupDto) {
-    this.createMuscleGroupUseCase.execute(createMuscleGroupDto.name, createMuscleGroupDto.imageUrl);
+  @UseInterceptors(
+    FileInterceptor("img", {
+      storage: memoryStorage(),
+    })
+  )
+  create(
+    @UploadedFile() img: Express.Multer.File,
+    @Body() createMuscleGroupDto: CreateMuscleGroupDto
+  ) {
+    this.createMuscleGroupUseCase.execute(createMuscleGroupDto.name, img);
 
     return { message: "Muscle group created." }
   }
@@ -52,11 +62,20 @@ export class MuscleGroupController {
   @UseGuards(RoleGuard)
   @Role(UserRole.ADMIN)
   @Patch(":id")
-  async update(@Param("id") id: number, @Body() updateMuscleGroupDto: UpdateMuscleGroupDto) {
+  @UseInterceptors(
+    FileInterceptor("img", {
+      storage: memoryStorage(),
+    })
+  )
+  async update(
+    @Param("id") id: number,
+    @UploadedFile() img: Express.Multer.File,
+    @Body() updateMuscleGroupDto: UpdateMuscleGroupDto
+  ) {
     const muscleGroupUpdated = await this.updateMuscleGroupUseCase.execute(
       id,
       updateMuscleGroupDto.name,
-      updateMuscleGroupDto.imageUrl
+      img
     );
 
     return {

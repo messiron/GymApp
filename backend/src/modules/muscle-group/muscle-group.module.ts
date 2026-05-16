@@ -8,6 +8,7 @@ import { FindByNameMuscleGroupUseCase } from './core/use-cases/find-by-name-musc
 import { UpdateMuscleGroupUseCase } from './core/use-cases/update-muscle-group.use-case';
 import { DeleteMuscleGroupUseCase } from './core/use-cases/delete-muscle-group.use-case';
 import { JwtModule } from '@nestjs/jwt';
+import { CloudinaryModule } from 'src/shared/infrastructure/cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { JwtModule } from '@nestjs/jwt';
       secret: process.env.ACCESS_TOKEN_SECRET,
       signOptions: { expiresIn: "15m" },
     }),
+    CloudinaryModule,
   ],
   providers: [
     CreateMuscleGroupUseCase,

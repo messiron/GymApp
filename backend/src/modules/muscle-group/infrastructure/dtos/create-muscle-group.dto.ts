@@ -7,5 +7,5 @@ export class CreateMuscleGroupDto {
 
   @IsOptional()
   @IsString()
-  imageUrl: string;
+  img: string;
 }

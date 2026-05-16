@@ -3,6 +3,7 @@ import { MuscleGroupRepositoryPort } from "../../core/ports/output/muscle-group.
 import { PrismaService } from "src/shared/infrastructure/prisma/prisma.service";
 import { MuscleGroup } from "../../core/entities/muscle-group.entity";
 import { MuscleGroup as Model } from "@prisma/client";
+import { formatImageUrlUtil } from "src/shared/core/utils/format-image-url.util";
 
 @Injectable()
 export class PrismaMuscleGroupRepository implements MuscleGroupRepositoryPort {
@@ -61,7 +62,7 @@ export class PrismaMuscleGroupRepository implements MuscleGroupRepositoryPort {
     return new MuscleGroup(
       model.id,
       model.name,
-      model.image_url,
+      formatImageUrlUtil(model.image_url),
       model.createdAt,
       model.updatedAt
     );
