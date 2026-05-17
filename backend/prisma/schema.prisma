@@ -104,7 +104,6 @@ model Exercise {
   id             Int              @id @default(autoincrement())
   name           String
   description    String?
-  gif_id       String?
   example_gif    String?
   timeForRep     Float
   routine        RoutineExercise[]
@@ -117,7 +116,6 @@ model Exercise {
 model MuscleGroup {
   id             Int              @id @default(autoincrement())
   name           String
-  image_id       String?
   image_url      String?
   exercises      Exercise[]       @relation("ExerciseMuscleGroup")
 
