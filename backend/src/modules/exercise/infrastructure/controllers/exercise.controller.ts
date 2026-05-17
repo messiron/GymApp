@@ -1,4 +1,4 @@
-import { Body, Controller, FileTypeValidator, Inject, MaxFileSizeValidator, ParseFilePipe, Post, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, FileTypeValidator, Get, Inject, MaxFileSizeValidator, ParseFilePipe, Post, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AuthAccessTokenGuard } from "src/shared/infrastructure/guards/auth-access-token.guard";
 import { CreateExercisesUseCase } from "../../core/use-cases/create-exercise.use-case";
@@ -7,6 +7,7 @@ import { UserRole } from "src/modules/user/core/enums/user-data.enum";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { memoryStorage } from "multer";
 import { createExerciseDto } from "../dtos/create-exercise.dto";
+import { FindAllExerciseUseCase } from "../../core/use-cases/find-all-exercise.use-case";
 
 @ApiTags("exercise")
 @ApiBearerAuth()
@@ -16,7 +17,14 @@ export class ExerciseController {
   constructor(
     @Inject(CreateExercisesUseCase)
     private readonly createExerciseUseCase: CreateExercisesUseCase,
+    @Inject(FindAllExerciseUseCase)
+    private readonly findAllExerciseUseCase: FindAllExerciseUseCase
   ) {}
+
+  @Get()
+  async getAll() {
+    return await this.findAllExerciseUseCase.execute();
+  }
 
   @UseGuards()
   @Role(UserRole.ADMIN)

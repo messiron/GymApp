@@ -1,10 +1,9 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject } from "@nestjs/common";
 import { ExerciseRepositoryPort } from "../ports/output/exercise.repository.port";
 import { FileStorage } from "src/shared/core/ports/file-storage.port";
 import { Exercise } from "../entities/exercise.entity";
 import { FindByIdMuscleGroupUseCase } from "src/modules/muscle-group/core/use-cases/find-by-id-muscle-group.use-case";
 
-@Injectable()
 export class CreateExercisesUseCase {
   constructor(
     @Inject(ExerciseRepositoryPort)

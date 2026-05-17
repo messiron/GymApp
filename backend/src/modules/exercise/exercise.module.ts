@@ -6,6 +6,7 @@ import { PrismaExerciseRepository } from './infrastructure/repositories/prisma-e
 import { CreateExercisesUseCase } from './core/use-cases/create-exercise.use-case';
 import { ExerciseController } from './infrastructure/controllers/exercise.controller';
 import { MuscleGroupModule } from '../muscle-group/muscle-group.module';
+import { FindAllExerciseUseCase } from './core/use-cases/find-all-exercise.use-case';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { MuscleGroupModule } from '../muscle-group/muscle-group.module';
   ],
   providers: [
     CreateExercisesUseCase,
+    FindAllExerciseUseCase,
     {
       provide: ExerciseRepositoryPort,
       useClass: PrismaExerciseRepository,
