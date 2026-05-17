@@ -3,6 +3,7 @@ import { ExerciseRepositoryPort } from "../ports/output/exercise.repository.port
 import { ExerciseNotFoundError } from "../entities/errors/Exercise-not-found.error";
 import { FileStorage } from "src/shared/core/ports/file-storage.port";
 import { Exercise } from "../entities/exercise.entity";
+import { MuscleGroupRepositoryPort } from "src/modules/muscle-group/core/ports/output/muscle-group.repository.port";
 
 export class UpdateExerciseUseCase {
   constructor(
@@ -10,6 +11,8 @@ export class UpdateExerciseUseCase {
     private readonly exerciseRespository: ExerciseRepositoryPort,
     @Inject(FileStorage)
     private readonly fileStorage: FileStorage,
+    @Inject(MuscleGroupRepositoryPort)
+    private readonly muscleGroupRepository: MuscleGroupRepositoryPort,
   ) {}
 
   async execute(data: {
@@ -24,7 +27,7 @@ export class UpdateExerciseUseCase {
     if (!exercise) throw new ExerciseNotFoundError();
 
     if (data.muscleGroups.length > 0) {
-      await this.exerciseRespository.updateMuscleGroups(data.id, data.muscleGroups);
+      await this.muscleGroupRepository.existingMuscleGroups(data.muscleGroups);
     }
 
     let exampleGif: string | null = null;
@@ -48,7 +51,7 @@ export class UpdateExerciseUseCase {
       new Date(),
     );
 
-    await this.exerciseRespository.update(newData);
+    await this.exerciseRespository.update(newData, data.muscleGroups);
 
     return { message: "Exercise updated successfully." };
   }

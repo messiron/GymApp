@@ -12,7 +12,6 @@ export abstract class ExerciseRepositoryPort {
   abstract findById(id: number, only: boolean): Promise<ExerciseReponse | null>;
   abstract findByName(name: string): Promise<ExerciseReponse[]>;
   abstract create(data: Exercise, muscleGroups: number[]): Promise<void>;
-  abstract updateMuscleGroups(id: number, idMgs: number[]): Promise<void>;
-  abstract update(data: Exercise): Promise<void>;
+  abstract update(data: Exercise, muscleGroups: number[]): Promise<void>;
   abstract delete(id: number): Promise<void>;
 }

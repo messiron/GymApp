@@ -4,6 +4,7 @@ import { PrismaService } from "src/shared/infrastructure/prisma/prisma.service";
 import { MuscleGroup } from "../../core/entities/muscle-group.entity";
 import { MuscleGroup as Model } from "@prisma/client";
 import { formatImageUrlUtil } from "src/shared/core/utils/format-image-url.util";
+import { MuscleGroupNotFoundError } from "../../core/entities/errors/muscle-group-not-found.error";
 
 @Injectable()
 export class PrismaMuscleGroupRepository implements MuscleGroupRepositoryPort {
@@ -32,6 +33,20 @@ export class PrismaMuscleGroupRepository implements MuscleGroupRepositoryPort {
     });
 
     return muscleGroups.map(mg => this.modelToEntity(mg));
+  }
+
+  async existingMuscleGroups(ids: number[]) {
+    const existingMg = await this.prisma.muscleGroup.findMany({
+      where: { 
+        id: { in: ids },
+       },
+       select: { id: true },
+    });
+
+    const existingIds = existingMg.map(mg => mg.id);
+    const missingIds = ids.filter(i => !existingIds.includes(i));
+
+    if (missingIds.length > 0) throw new MuscleGroupNotFoundError();
   }
 
   async create(muscleGroup: MuscleGroup): Promise<void> {

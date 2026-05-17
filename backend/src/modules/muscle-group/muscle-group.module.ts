@@ -33,7 +33,7 @@ import { FindByIdMuscleGroupUseCase } from './core/use-cases/find-by-id-muscle-g
   ],
   controllers: [MuscleGroupController],
   exports: [
-    FindByIdMuscleGroupUseCase,
+    MuscleGroupRepositoryPort,
   ],
 })
 export class MuscleGroupModule {}

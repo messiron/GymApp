@@ -2,7 +2,7 @@ import { Inject } from "@nestjs/common";
 import { ExerciseRepositoryPort } from "../ports/output/exercise.repository.port";
 import { FileStorage } from "src/shared/core/ports/file-storage.port";
 import { Exercise } from "../entities/exercise.entity";
-import { FindByIdMuscleGroupUseCase } from "src/modules/muscle-group/core/use-cases/find-by-id-muscle-group.use-case";
+import { MuscleGroupRepositoryPort } from "src/modules/muscle-group/core/ports/output/muscle-group.repository.port";
 
 export class CreateExercisesUseCase {
   constructor(
@@ -10,8 +10,8 @@ export class CreateExercisesUseCase {
     private readonly exerciseRepository: ExerciseRepositoryPort,
     @Inject(FileStorage)
     private readonly fileStorage: FileStorage,
-    @Inject(FindByIdMuscleGroupUseCase)
-    private readonly findByIdMuscleGroupUseCase: FindByIdMuscleGroupUseCase
+    @Inject(MuscleGroupRepositoryPort)
+    private readonly muscleGroupRepository: MuscleGroupRepositoryPort,
   ) {}
 
   async execute(data: {
@@ -21,9 +21,8 @@ export class CreateExercisesUseCase {
     timeForRep: number,
     relatedMuscleGroups: number[]
   }) {
-    // check if relatedMuscleGroups exist
-    for (const id of data.relatedMuscleGroups) {
-      await this.findByIdMuscleGroupUseCase.execute(id);
+    if (data.relatedMuscleGroups.length > 0) {
+      await this.muscleGroupRepository.existingMuscleGroups(data.relatedMuscleGroups);
     }
 
     let gifExample: string | null = null;
