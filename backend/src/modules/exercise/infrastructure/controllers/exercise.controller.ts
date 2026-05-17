@@ -9,6 +9,7 @@ import { memoryStorage } from "multer";
 import { createExerciseDto } from "../dtos/create-exercise.dto";
 import { FindAllExerciseUseCase } from "../../core/use-cases/find-all-exercise.use-case";
 import { FindByIdExerciseUseCase } from "../../core/use-cases/find-by-id-exercise.use-case";
+import { FindByNameExerciseUseCase } from "../../core/use-cases/find-by-name-exercise.use-case";
 
 @ApiTags("exercise")
 @ApiBearerAuth()
@@ -21,7 +22,9 @@ export class ExerciseController {
     @Inject(FindAllExerciseUseCase)
     private readonly findAllExerciseUseCase: FindAllExerciseUseCase,
     @Inject(FindByIdExerciseUseCase)
-    private readonly findByIdExerciseUseCase: FindByIdExerciseUseCase
+    private readonly findByIdExerciseUseCase: FindByIdExerciseUseCase,
+    @Inject(FindByNameExerciseUseCase)
+    private readonly findByNameExerciseUseCase: FindByNameExerciseUseCase,
   ) {}
 
   @Get()
@@ -32,6 +35,11 @@ export class ExerciseController {
   @Get(":id")
   async findById(@Param("id") id: number) {
     return await this.findByIdExerciseUseCase.execute(id);
+  }
+
+  @Get("find-by-name/:name")
+  async findByName(@Param("name") name: string) {
+    return await this.findByNameExerciseUseCase.execute(name);
   }
 
   @UseGuards()
