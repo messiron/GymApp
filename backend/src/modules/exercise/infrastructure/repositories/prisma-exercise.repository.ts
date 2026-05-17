@@ -6,6 +6,7 @@ import { MuscleGroup as MuscleGroupModel } from "@prisma/client";
 import { Injectable } from "@nestjs/common";
 import { MuscleGroup } from "src/modules/muscle-group/core/entities/muscle-group.entity";
 import { MuscleGroupNotFoundError } from "src/modules/muscle-group/core/entities/errors/muscle-group-not-found.error";
+import { formatImageUrlUtil } from "src/shared/core/utils/format-image-url.util";
 
 @Injectable()
 export class PrismaExerciseRepository implements ExerciseRepositoryPort {
@@ -88,7 +89,7 @@ export class PrismaExerciseRepository implements ExerciseRepositoryPort {
         model.id,
         model.name,
         model.description,
-        model.example_gif,
+        formatImageUrlUtil(model.example_gif),
         model.timeForRep,
         model.createdAt,
         model.updatedAt,
