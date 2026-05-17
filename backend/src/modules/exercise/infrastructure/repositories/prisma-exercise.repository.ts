@@ -1,6 +1,6 @@
 import { PrismaService } from "src/shared/infrastructure/prisma/prisma.service";
-import { ExerciseRepositoryPort } from "../core/ports/output/exercise.repository.port"
-import { Exercise } from "../core/entities/exercise.entity";
+import { ExerciseRepositoryPort } from "../../core/ports/output/exercise.repository.port"
+import { Exercise } from "../../core/entities/exercise.entity";
 import { Exercise as Model } from "@prisma/client";
 import { MuscleGroup } from "src/modules/muscle-group/core/entities/muscle-group.entity";
 

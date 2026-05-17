@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { CloudinaryModule } from 'src/shared/infrastructure/cloudinary/cloudinary.module';
 import { ExerciseRepositoryPort } from './core/ports/output/exercise.repository.port';
-import { PrismaExerciseRepository } from './repositories/prisma-exercise.repository';
+import { PrismaExerciseRepository } from './infrastructure/repositories/prisma-exercise.repository';
 
 @Module({
   imports: [
