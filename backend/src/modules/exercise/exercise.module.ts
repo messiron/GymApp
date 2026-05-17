@@ -9,6 +9,7 @@ import { MuscleGroupModule } from '../muscle-group/muscle-group.module';
 import { FindAllExerciseUseCase } from './core/use-cases/find-all-exercise.use-case';
 import { FindByIdExerciseUseCase } from './core/use-cases/find-by-id-exercise.use-case';
 import { FindByNameExerciseUseCase } from './core/use-cases/find-by-name-exercise.use-case';
+import { UpdateExerciseUseCase } from './core/use-cases/update-exercise.use-case';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { FindByNameExerciseUseCase } from './core/use-cases/find-by-name-exercis
     FindAllExerciseUseCase,
     FindByIdExerciseUseCase,
     FindByNameExerciseUseCase,
+    UpdateExerciseUseCase,
     {
       provide: ExerciseRepositoryPort,
       useClass: PrismaExerciseRepository,

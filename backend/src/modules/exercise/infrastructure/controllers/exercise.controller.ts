@@ -1,4 +1,4 @@
-import { Body, Controller, FileTypeValidator, Get, Inject, MaxFileSizeValidator, Param, ParseFilePipe, Post, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, FileTypeValidator, Get, Inject, MaxFileSizeValidator, Param, ParseFilePipe, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AuthAccessTokenGuard } from "src/shared/infrastructure/guards/auth-access-token.guard";
 import { CreateExercisesUseCase } from "../../core/use-cases/create-exercise.use-case";
@@ -10,6 +10,8 @@ import { createExerciseDto } from "../dtos/create-exercise.dto";
 import { FindAllExerciseUseCase } from "../../core/use-cases/find-all-exercise.use-case";
 import { FindByIdExerciseUseCase } from "../../core/use-cases/find-by-id-exercise.use-case";
 import { FindByNameExerciseUseCase } from "../../core/use-cases/find-by-name-exercise.use-case";
+import { UpdateExerciseDto } from "../dtos/update-exercise.dto";
+import { UpdateExerciseUseCase } from "../../core/use-cases/update-exercise.use-case";
 
 @ApiTags("exercise")
 @ApiBearerAuth()
@@ -25,6 +27,8 @@ export class ExerciseController {
     private readonly findByIdExerciseUseCase: FindByIdExerciseUseCase,
     @Inject(FindByNameExerciseUseCase)
     private readonly findByNameExerciseUseCase: FindByNameExerciseUseCase,
+    @Inject(UpdateExerciseUseCase)
+    private readonly updateExerciseUseCase: UpdateExerciseUseCase,
   ) {}
 
   @Get()
@@ -63,5 +67,28 @@ export class ExerciseController {
     });
 
     return { message: "Exercise created successfully." };
+  }
+
+  @UseGuards()
+  @Role(UserRole.ADMIN)
+  @Patch(":id")
+  @UseInterceptors(
+    FileInterceptor("img", {
+      storage: memoryStorage(),
+    })
+  )
+  async update(
+    @Param("id") id: number,
+    @Body() updateExerciseDto: UpdateExerciseDto,
+    @UploadedFile() img: Express.Multer.File,
+  ) {
+    return this.updateExerciseUseCase.execute({
+      id,
+      name: updateExerciseDto.name,
+      description: updateExerciseDto.description,
+      img,
+      timeForRep: updateExerciseDto.timeForRep,
+      muscleGroups: updateExerciseDto.relatedMuscleGroups,
+    });
   }
 }

@@ -5,6 +5,7 @@ import { Exercise as ExerciseModel } from "@prisma/client";
 import { MuscleGroup as MuscleGroupModel } from "@prisma/client";
 import { Injectable } from "@nestjs/common";
 import { MuscleGroup } from "src/modules/muscle-group/core/entities/muscle-group.entity";
+import { MuscleGroupNotFoundError } from "src/modules/muscle-group/core/entities/errors/muscle-group-not-found.error";
 
 @Injectable()
 export class PrismaExerciseRepository implements ExerciseRepositoryPort {
@@ -20,14 +21,14 @@ export class PrismaExerciseRepository implements ExerciseRepositoryPort {
     return exercises.map(m => this.modelToResponse(m, m.muscleGroups));
   }
 
-  async findById(id: number): Promise<ExerciseReponse | null> {
+  async findById(id: number, only: boolean): Promise<ExerciseReponse | null> {
     const exercise = await this.prisma.exercise.findFirst({
       where: { id },
-      include: { muscleGroups: true },
+      include: { muscleGroups: only },
     });
     if (!exercise) return null;
 
-    return this.modelToResponse(exercise, exercise.muscleGroups);
+    return this.modelToResponse(exercise, only ? exercise.muscleGroups : []);
   }
 
   async findByName(name: string): Promise<ExerciseReponse[]> {
@@ -82,7 +83,30 @@ export class PrismaExerciseRepository implements ExerciseRepositoryPort {
     });
   }
 
-  async update(data: Exercise, connMg: number[], discMg: number[]): Promise<void> {
+  async updateMuscleGroups(id: number, idMgs: number[]): Promise<void> {
+    const existingMuscleGroups = await this.prisma.muscleGroup.findMany({
+      where: { 
+        id: { in: idMgs },
+       },
+       select: { id: true },
+    });
+
+    const existingIds = existingMuscleGroups.map(mg => mg.id);
+    const missingIds = idMgs.filter(i => !existingIds.includes(i));
+
+    if (missingIds.length > 0) throw new MuscleGroupNotFoundError();
+
+    await this.prisma.exercise.update({
+      where: { id },
+      data: {
+        muscleGroups: {
+          set: idMgs.map(id => ({ id }))
+        }
+      },
+    });
+  }
+
+  async update(data: Exercise): Promise<void> {
     await this.prisma.exercise.update({
       where: { id: data.id },
       data: {
@@ -90,14 +114,6 @@ export class PrismaExerciseRepository implements ExerciseRepositoryPort {
         description: data.description,
         example_gif: data.exampleGif,
         timeForRep: data.timeForRep,
-        muscleGroups: {
-          connect: connMg.map(id => {
-            return { id };
-          }),
-          disconnect: discMg.map(id => {
-            return { id }
-          }),
-        },
       },
     });
   }
