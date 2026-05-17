@@ -1,38 +1,47 @@
 import { PrismaService } from "src/shared/infrastructure/prisma/prisma.service";
-import { ExerciseRepositoryPort } from "../../core/ports/output/exercise.repository.port"
+import { ExerciseReponse, ExerciseRepositoryPort } from "../../core/ports/output/exercise.repository.port"
 import { Exercise } from "../../core/entities/exercise.entity";
-import { Exercise as Model } from "@prisma/client";
-import { MuscleGroup } from "src/modules/muscle-group/core/entities/muscle-group.entity";
+import { Exercise as ExerciseModel } from "@prisma/client";
+import { MuscleGroup as MuscleGroupModel } from "@prisma/client";
 import { Injectable } from "@nestjs/common";
+import { MuscleGroup } from "src/modules/muscle-group/core/entities/muscle-group.entity";
 
 @Injectable()
 export class PrismaExerciseRepository implements ExerciseRepositoryPort {
   constructor (private readonly prisma: PrismaService) {}
 
-  async findAll(): Promise<Exercise[]> {
-    const exercises = await this.prisma.exercise.findMany();
+  async findAll(): Promise<ExerciseReponse[]> {
+    const exercises = await this.prisma.exercise.findMany({
+      include: {
+        muscleGroups: true,
+      }
+    });
 
-    return exercises.map(m => this.modelToObject(m));
+    return exercises.map(m => this.modelToResponse(m, m.muscleGroups));
   }
 
-  async findById(id: number): Promise<Exercise | null> {
-    const exercise = await this.prisma.exercise.findFirst({ where: { id } });
+  async findById(id: number): Promise<ExerciseReponse | null> {
+    const exercise = await this.prisma.exercise.findFirst({
+      where: { id },
+      include: { muscleGroups: true },
+    });
     if (!exercise) return null;
 
-    return this.modelToObject(exercise);
+    return this.modelToResponse(exercise, exercise.muscleGroups);
   }
 
-  async findByName(name: string): Promise<Exercise[]> {
+  async findByName(name: string): Promise<ExerciseReponse[]> {
     const exercises = await this.prisma.exercise.findMany({
       where: {
         name: {
           contains: name,
           mode: "insensitive",
         }
-      }
+      },
+      include: { muscleGroups: true },
     });
 
-    return exercises.map(m => this.modelToObject(m));
+    return exercises.map(m => this.modelToResponse(m, m.muscleGroups));
   }
 
   async getRelatedMuscles(id: number): Promise<MuscleGroup[]> {
@@ -97,15 +106,24 @@ export class PrismaExerciseRepository implements ExerciseRepositoryPort {
     await this.prisma.exercise.delete({ where: { id } });
   }
 
-  private modelToObject(model: Model) {
-    return new Exercise(
-      model.id,
-      model.name,
-      model.description,
-      model.example_gif,
-      model.timeForRep,
-      model.createdAt,
-      model.updatedAt,
-    );
+  private modelToResponse(model: ExerciseModel, muscleGroups: MuscleGroupModel[]): ExerciseReponse {
+    return {
+      data: new Exercise(
+        model.id,
+        model.name,
+        model.description,
+        model.example_gif,
+        model.timeForRep,
+        model.createdAt,
+        model.updatedAt,
+      ),
+      muscleGroups: muscleGroups.map(v => new MuscleGroup(
+        v.id,
+        v.name,
+        v.image_url,
+        v.createdAt,
+        v.updatedAt
+      )),
+    };
   }
 }
