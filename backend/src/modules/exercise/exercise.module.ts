@@ -3,6 +3,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { CloudinaryModule } from 'src/shared/infrastructure/cloudinary/cloudinary.module';
 import { ExerciseRepositoryPort } from './core/ports/output/exercise.repository.port';
 import { PrismaExerciseRepository } from './infrastructure/repositories/prisma-exercise.repository';
+import { CreateExercisesUseCase } from './core/use-cases/create-exercise.use-case';
+import { ExerciseController } from './infrastructure/controllers/exercise.controller';
+import { MuscleGroupModule } from '../muscle-group/muscle-group.module';
 
 @Module({
   imports: [
@@ -11,12 +14,15 @@ import { PrismaExerciseRepository } from './infrastructure/repositories/prisma-e
       signOptions: {  expiresIn: "15m" },
     }),
     CloudinaryModule,
+    MuscleGroupModule,
   ],
   providers: [
+    CreateExercisesUseCase,
     {
       provide: ExerciseRepositoryPort,
       useClass: PrismaExerciseRepository,
     },
   ],
+  controllers: [ExerciseController],
 })
 export class ExerciseModule {}

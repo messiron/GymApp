@@ -9,6 +9,7 @@ import { UpdateMuscleGroupUseCase } from './core/use-cases/update-muscle-group.u
 import { DeleteMuscleGroupUseCase } from './core/use-cases/delete-muscle-group.use-case';
 import { JwtModule } from '@nestjs/jwt';
 import { CloudinaryModule } from 'src/shared/infrastructure/cloudinary/cloudinary.module';
+import { FindByIdMuscleGroupUseCase } from './core/use-cases/find-by-id-muscle-group.use-case';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { CloudinaryModule } from 'src/shared/infrastructure/cloudinary/cloudinar
     CreateMuscleGroupUseCase,
     FindAllMuscleGroupsUseCase,
     FindByNameMuscleGroupUseCase,
+    FindByIdMuscleGroupUseCase,
     UpdateMuscleGroupUseCase,
     DeleteMuscleGroupUseCase,
     {
@@ -30,5 +32,8 @@ import { CloudinaryModule } from 'src/shared/infrastructure/cloudinary/cloudinar
     },
   ],
   controllers: [MuscleGroupController],
+  exports: [
+    FindByIdMuscleGroupUseCase,
+  ],
 })
 export class MuscleGroupModule {}

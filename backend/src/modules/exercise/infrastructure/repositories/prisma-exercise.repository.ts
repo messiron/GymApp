@@ -3,7 +3,9 @@ import { ExerciseRepositoryPort } from "../../core/ports/output/exercise.reposit
 import { Exercise } from "../../core/entities/exercise.entity";
 import { Exercise as Model } from "@prisma/client";
 import { MuscleGroup } from "src/modules/muscle-group/core/entities/muscle-group.entity";
+import { Injectable } from "@nestjs/common";
 
+@Injectable()
 export class PrismaExerciseRepository implements ExerciseRepositoryPort {
   constructor (private readonly prisma: PrismaService) {}
 
