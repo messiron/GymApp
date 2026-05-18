@@ -12,7 +12,7 @@ export abstract class RoutineRepositoryPort {
   abstract findById(userId: string, routineId: number): Promise<Routine | null>;
   abstract findByTitle(userId: string, title: string): Promise<Routine[]>;
   abstract getExercises(userId: string, id: number): Promise<RoutineExerciseResponse[]>;
-  abstract create(routine: Routine, routineExercise: RoutineExercise[]): Promise<void>;
+  abstract create(routine: Routine): Promise<void>;
   abstract update(routine: Routine): Promise<void>;
   abstract delete(id: number): Promise<void>;
 }

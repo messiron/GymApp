@@ -4,14 +4,6 @@ import { Routine } from "../entities/routine.entity";
 import { ExistExerciseUseCase } from "src/modules/exercise/core/use-cases/exist-exercise.use-case";
 import { RoutineExercise } from "../entities/routine-exercise.entity";
 
-export type CreateRoutineExerciseData = {
-  reps: number,
-  sets: number,
-  order: number,
-  weight: number | null,
-  exerciseId: number,
-}
-
 export class CreateRoutineUseCase {
   constructor(
     @Inject(RoutineRepositoryPort)
@@ -24,20 +16,7 @@ export class CreateRoutineUseCase {
     title: string,
     description: string | null,
     userId: string,
-    routineExercises: CreateRoutineExerciseData[],
   }) {
-    for (const re of data.routineExercises) {
-      await this.existExerciseUseCase.execute(re.exerciseId);
-    }
-
-    const routineExercises = data.routineExercises.map(e => new RoutineExercise(
-      1,
-      e.exerciseId,
-      e.reps,
-      e.sets,
-      e.order,
-      e.weight,
-    )); 
 
     const newRoutine = new Routine(
       1,
@@ -48,7 +27,7 @@ export class CreateRoutineUseCase {
       new Date(),
     );
 
-    await this.routineRepository.create(newRoutine, routineExercises);
+    await this.routineRepository.create(newRoutine);
     
     return { message: "Routine created successfully" };
   }

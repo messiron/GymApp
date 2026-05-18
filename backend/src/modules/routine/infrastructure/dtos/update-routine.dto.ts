@@ -1,11 +1,3 @@
-import { IsOptional, IsString, MinLength } from "class-validator";
+import { CreateRoutineDto } from "./create-routine.dto";
 
-export class UpdateRoutineDto {
-  @IsString()
-  @MinLength(3)
-  title: string;
-
-  @IsString()
-  @IsOptional()
-  description: string | null = null;
-}
+export class UpdateRoutineDto extends CreateRoutineDto {}

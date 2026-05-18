@@ -59,7 +59,6 @@ export class RoutineController {
       title: data.title,
       description: data.description,
       userId: req.user.sub,
-      routineExercises: data.routineExercises
     });
   }
 
