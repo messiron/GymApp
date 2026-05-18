@@ -12,7 +12,7 @@ export class DeleteMuscleGroupUseCase {
   ) {}
 
   async execute(id: number) {
-    const mg = await this.muscleGroupRepository.findById(id);
+    const mg = await this.muscleGroupRepository.findById(id, false);
     if (!mg) {throw new MuscleGroupNotFoundError()};
     
     if (mg.imageUrl) {

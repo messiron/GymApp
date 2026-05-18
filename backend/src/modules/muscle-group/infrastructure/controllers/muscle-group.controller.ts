@@ -72,16 +72,11 @@ export class MuscleGroupController {
     @UploadedFile() img: Express.Multer.File,
     @Body() updateMuscleGroupDto: UpdateMuscleGroupDto
   ) {
-    const muscleGroupUpdated = await this.updateMuscleGroupUseCase.execute(
+    return await this.updateMuscleGroupUseCase.execute(
       id,
       updateMuscleGroupDto.name,
       img
     );
-
-    return {
-      message: "Muscle group updated successfully.",
-      data: muscleGroupUpdated,
-    }
   }
 
   @UseGuards(RoleGuard)

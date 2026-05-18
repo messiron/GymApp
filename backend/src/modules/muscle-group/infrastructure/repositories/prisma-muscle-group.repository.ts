@@ -12,14 +12,14 @@ export class PrismaMuscleGroupRepository implements MuscleGroupRepositoryPort {
 
   async findAll(): Promise<MuscleGroup[]> {
     const muscleGroups = await this.prisma.muscleGroup.findMany();
-    return muscleGroups.map((mg) => this.modelToEntity(mg));
+    return muscleGroups.map((mg) => this.modelToEntity(mg, true));
   }
 
-  async findById(id: number): Promise<MuscleGroup | null> {
+  async findById(id: number, format: boolean): Promise<MuscleGroup | null> {
     const muscleGroup = await this.prisma.muscleGroup.findUnique({ where: { id } });
 
     if (!muscleGroup) return null;
-    return this.modelToEntity(muscleGroup);
+    return this.modelToEntity(muscleGroup, format);
   }
 
   async findByName(name: string): Promise<MuscleGroup[]> {
@@ -32,7 +32,7 @@ export class PrismaMuscleGroupRepository implements MuscleGroupRepositoryPort {
       }
     });
 
-    return muscleGroups.map(mg => this.modelToEntity(mg));
+    return muscleGroups.map(mg => this.modelToEntity(mg, true));
   }
 
   async existingMuscleGroups(ids: number[]) {
@@ -73,11 +73,11 @@ export class PrismaMuscleGroupRepository implements MuscleGroupRepositoryPort {
     await this.prisma.muscleGroup.delete({ where: { id } });
   }
 
-  private modelToEntity(model: Model): MuscleGroup {
+  private modelToEntity(model: Model, format: boolean): MuscleGroup {
     return new MuscleGroup(
       model.id,
       model.name,
-      formatImageUrlUtil(model.image_url),
+      format ? formatImageUrlUtil(model.image_url) : model.image_url,
       model.createdAt,
       model.updatedAt
     );

@@ -23,7 +23,7 @@ export class UpdateExerciseUseCase {
     timeForRep: number,
     muscleGroups: number[],
   }) {
-    const exercise = await this.exerciseRespository.findById(data.id, false, true);
+    const exercise = await this.exerciseRespository.findById(data.id, false, false);
     if (!exercise) throw new ExerciseNotFoundError();
 
     if (data.muscleGroups.length > 0) {

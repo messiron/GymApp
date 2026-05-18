@@ -9,7 +9,7 @@ export class FindByIdMuscleGroupUseCase {
   ) {}
 
   async execute(id: number) {
-    const mg = await this.muscleGroupRepository.findById(id);
+    const mg = await this.muscleGroupRepository.findById(id, true);
 
     if (!mg) throw new MuscleGroupNotFoundError();
 

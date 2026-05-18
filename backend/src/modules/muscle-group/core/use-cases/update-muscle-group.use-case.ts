@@ -13,7 +13,7 @@ export class UpdateMuscleGroupUseCase {
   ) {}
 
   async execute(id: number, name: string, img: Express.Multer.File) {
-    const mg = await this.muscleGroupRepository.findById(id);
+    const mg = await this.muscleGroupRepository.findById(id, false);
     if (!mg) throw new MuscleGroupNotFoundError();
     let newImage = mg.imageUrl;
 
@@ -35,6 +35,6 @@ export class UpdateMuscleGroupUseCase {
     );
     await this.muscleGroupRepository.update(newData);
 
-    return newData;
+    return { message: "Muscle group updated successfully." };
   }
 }
