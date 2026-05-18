@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MuscleGroupModule } from './modules/muscle-group/muscle-group.module';
 import { ExerciseModule } from './modules/exercise/exercise.module';
 import { PrismaModule } from './shared/infrastructure/prisma/prisma.module';
+import { RoutineModule } from './modules/routine/routine.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { PrismaModule } from './shared/infrastructure/prisma/prisma.module';
     AuthModule,
     MuscleGroupModule,
     ExerciseModule,
+    RoutineModule,
   ],
   controllers: [AppController],
   providers: [AppService],
