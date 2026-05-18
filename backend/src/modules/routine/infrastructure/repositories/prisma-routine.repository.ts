@@ -18,10 +18,10 @@ export class PrismaRoutineRepository implements RoutineRepositoryPort {
     return routines.map(r => this.modelToRoutine(r));
   }
 
-  async findById(userId: string, id: number): Promise<Routine | null> {
+  async findById(userId: string, routineId: number): Promise<Routine | null> {
     const routine = await this.prisma.routine.findUnique({
       where: {
-        id,
+        id: routineId,
         AND: { userId },
       }
     });
