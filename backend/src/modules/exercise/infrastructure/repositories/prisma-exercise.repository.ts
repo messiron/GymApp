@@ -19,17 +19,17 @@ export class PrismaExerciseRepository implements ExerciseRepositoryPort {
       }
     });
 
-    return exercises.map(m => this.modelToResponse(m, m.muscleGroups));
+    return exercises.map(m => this.modelToResponse(m, m.muscleGroups, true));
   }
 
-  async findById(id: number, only: boolean): Promise<ExerciseReponse | null> {
+  async findById(id: number, mg: boolean, format: boolean): Promise<ExerciseReponse | null> {
     const exercise = await this.prisma.exercise.findFirst({
       where: { id },
-      include: { muscleGroups: only },
+      include: { muscleGroups: mg },
     });
     if (!exercise) return null;
 
-    return this.modelToResponse(exercise, only ? exercise.muscleGroups : []);
+    return this.modelToResponse(exercise, mg ? exercise.muscleGroups : [], format);
   }
 
   async findByName(name: string): Promise<ExerciseReponse[]> {
@@ -43,7 +43,7 @@ export class PrismaExerciseRepository implements ExerciseRepositoryPort {
       include: { muscleGroups: true },
     });
 
-    return exercises.map(m => this.modelToResponse(m, m.muscleGroups));
+    return exercises.map(m => this.modelToResponse(m, m.muscleGroups, true));
   }
 
   async create(data: Exercise, muscleGroups: number[]): Promise<void> {
@@ -83,13 +83,17 @@ export class PrismaExerciseRepository implements ExerciseRepositoryPort {
     await this.prisma.exercise.delete({ where: { id } });
   }
 
-  private modelToResponse(model: ExerciseModel, muscleGroups: MuscleGroupModel[]): ExerciseReponse {
+  private modelToResponse(
+    model: ExerciseModel,
+    muscleGroups: MuscleGroupModel[],
+    format: boolean
+  ): ExerciseReponse {
     return {
       data: new Exercise(
         model.id,
         model.name,
         model.description,
-        formatImageUrlUtil(model.example_gif),
+        format ? formatImageUrlUtil(model.example_gif) : model.example_gif,
         model.timeForRep,
         model.createdAt,
         model.updatedAt,

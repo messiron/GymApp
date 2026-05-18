@@ -10,6 +10,7 @@ import { FindAllExerciseUseCase } from './core/use-cases/find-all-exercise.use-c
 import { FindByIdExerciseUseCase } from './core/use-cases/find-by-id-exercise.use-case';
 import { FindByNameExerciseUseCase } from './core/use-cases/find-by-name-exercise.use-case';
 import { UpdateExerciseUseCase } from './core/use-cases/update-exercise.use-case';
+import { DeleteExerciseUseCase } from './core/use-cases/delete-exercise.use-case';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { UpdateExerciseUseCase } from './core/use-cases/update-exercise.use-case
     FindByIdExerciseUseCase,
     FindByNameExerciseUseCase,
     UpdateExerciseUseCase,
+    DeleteExerciseUseCase,
     {
       provide: ExerciseRepositoryPort,
       useClass: PrismaExerciseRepository,

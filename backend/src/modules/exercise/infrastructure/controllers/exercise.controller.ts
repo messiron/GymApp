@@ -1,4 +1,4 @@
-import { Body, Controller, FileTypeValidator, Get, Inject, MaxFileSizeValidator, Param, ParseFilePipe, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, FileTypeValidator, Get, Inject, MaxFileSizeValidator, Param, ParseFilePipe, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AuthAccessTokenGuard } from "src/shared/infrastructure/guards/auth-access-token.guard";
 import { CreateExercisesUseCase } from "../../core/use-cases/create-exercise.use-case";
@@ -12,6 +12,8 @@ import { FindByIdExerciseUseCase } from "../../core/use-cases/find-by-id-exercis
 import { FindByNameExerciseUseCase } from "../../core/use-cases/find-by-name-exercise.use-case";
 import { UpdateExerciseDto } from "../dtos/update-exercise.dto";
 import { UpdateExerciseUseCase } from "../../core/use-cases/update-exercise.use-case";
+import { RoleGuard } from "src/shared/infrastructure/guards/role.guard";
+import { DeleteExerciseUseCase } from "../../core/use-cases/delete-exercise.use-case";
 
 @ApiTags("exercise")
 @ApiBearerAuth()
@@ -29,6 +31,8 @@ export class ExerciseController {
     private readonly findByNameExerciseUseCase: FindByNameExerciseUseCase,
     @Inject(UpdateExerciseUseCase)
     private readonly updateExerciseUseCase: UpdateExerciseUseCase,
+    @Inject(DeleteExerciseUseCase)
+    private readonly deleteExerciseUseCase: DeleteExerciseUseCase,
   ) {}
 
   @Get()
@@ -46,7 +50,7 @@ export class ExerciseController {
     return await this.findByNameExerciseUseCase.execute(name);
   }
 
-  @UseGuards()
+  @UseGuards(RoleGuard)
   @Role(UserRole.ADMIN)
   @Post()
   @UseInterceptors(
@@ -69,7 +73,7 @@ export class ExerciseController {
     return { message: "Exercise created successfully." };
   }
 
-  @UseGuards()
+  @UseGuards(RoleGuard)
   @Role(UserRole.ADMIN)
   @Patch(":id")
   @UseInterceptors(
@@ -90,5 +94,12 @@ export class ExerciseController {
       timeForRep: updateExerciseDto.timeForRep,
       muscleGroups: updateExerciseDto.relatedMuscleGroups,
     });
+  }
+
+  @UseGuards(RoleGuard)
+  @Role(UserRole.ADMIN)
+  @Delete(":id")
+  async delete(@Param("id") id: number) {
+    return await this.deleteExerciseUseCase.execute(id);
   }
 }

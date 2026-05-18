@@ -8,8 +8,9 @@ export type ExerciseReponse = {
 
 export abstract class ExerciseRepositoryPort {
   abstract findAll(): Promise<ExerciseReponse[]>;
-  // only indicates if the query must bring a muscleGroups 
-  abstract findById(id: number, only: boolean): Promise<ExerciseReponse | null>;
+  // mg indicates if the query must bring a muscleGroups and format indicates
+  // if the query must bring a exercise with its exampleGif formatted
+  abstract findById(id: number, mg: boolean, format: boolean): Promise<ExerciseReponse | null>;
   abstract findByName(name: string): Promise<ExerciseReponse[]>;
   abstract create(data: Exercise, muscleGroups: number[]): Promise<void>;
   abstract update(data: Exercise, muscleGroups: number[]): Promise<void>;

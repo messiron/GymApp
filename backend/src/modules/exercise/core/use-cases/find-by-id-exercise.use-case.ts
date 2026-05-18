@@ -9,7 +9,7 @@ export class FindByIdExerciseUseCase {
   ) {}
 
   async execute(id: number) {
-    const exercise = await this.exerciseRepository.findById(id, true);
+    const exercise = await this.exerciseRepository.findById(id, true, true);
     if (!exercise) throw new ExerciseNotFoundError();
 
     return exercise;
