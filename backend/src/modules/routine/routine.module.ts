@@ -5,6 +5,7 @@ import { PrismaRoutineRepository } from "./infrastructure/repositories/prisma-ro
 import { ExerciseModule } from "../exercise/exercise.module";
 import { CreateRoutineUseCase } from "./core/use-cases/create-routine.use-case";
 import { RoutineController } from "./infrastructure/controllers/routine.controller";
+import { FindAllRoutinesUseCase } from "./core/use-cases/find-all-routines.use-case";
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { RoutineController } from "./infrastructure/controllers/routine.controll
   ],
   providers: [
     CreateRoutineUseCase,
+    FindAllRoutinesUseCase,
     {
       provide: RoutineRepositoryPort,
       useClass: PrismaRoutineRepository,

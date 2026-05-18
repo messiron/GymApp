@@ -6,6 +6,7 @@ import { CreateRoutineDto } from "../dtos/create-routine.dto";
 import { RoleGuard } from "src/shared/infrastructure/guards/role.guard";
 import { Role } from "src/shared/infrastructure/decorators/roles.decorator";
 import { UserRole } from "src/modules/user/core/enums/user-data.enum";
+import { FindAllRoutinesUseCase } from "../../core/use-cases/find-all-routines.use-case";
 
 @ApiTags("routines")
 @ApiBearerAuth()
@@ -16,7 +17,14 @@ export class RoutineController {
   constructor(
     @Inject(CreateRoutineUseCase)
     private readonly createRoutineUseCase: CreateRoutineUseCase,
+    @Inject(FindAllRoutinesUseCase)
+    private readonly findAllRoutinesUseCase: CreateRoutineUseCase,
   ) {}
+  @Get()
+  async findAll(@Req() req: any) {
+    return await this.findAllRoutinesUseCase.execute(req.user.sub);
+  }
+
   @Post()
   async create(@Body() data: CreateRoutineDto, @Req() req: any) {
     return await this.createRoutineUseCase.execute({
