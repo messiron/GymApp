@@ -7,6 +7,7 @@ import { CreateRoutineUseCase } from "./core/use-cases/create-routine.use-case";
 import { RoutineController } from "./infrastructure/controllers/routine.controller";
 import { FindAllRoutinesUseCase } from "./core/use-cases/find-all-routines.use-case";
 import { FindByIdRoutineUseCase } from "./core/use-cases/find-by-id-routine.use-case";
+import { FindByTitleRoutineUseCase } from "./core/use-cases/find-by-title-routine.use-case";
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { FindByIdRoutineUseCase } from "./core/use-cases/find-by-id-routine.use-
     CreateRoutineUseCase,
     FindAllRoutinesUseCase,
     FindByIdRoutineUseCase,
+    FindByTitleRoutineUseCase,
     {
       provide: RoutineRepositoryPort,
       useClass: PrismaRoutineRepository,

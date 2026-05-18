@@ -8,6 +8,7 @@ import { Role } from "src/shared/infrastructure/decorators/roles.decorator";
 import { UserRole } from "src/modules/user/core/enums/user-data.enum";
 import { FindAllRoutinesUseCase } from "../../core/use-cases/find-all-routines.use-case";
 import { FindByIdRoutineUseCase } from "../../core/use-cases/find-by-id-routine.use-case";
+import { FindByTitleRoutineUseCase } from "../../core/use-cases/find-by-title-routine.use-case";
 
 @ApiTags("routines")
 @ApiBearerAuth()
@@ -22,6 +23,8 @@ export class RoutineController {
     private readonly findAllRoutinesUseCase: CreateRoutineUseCase,
     @Inject(FindByIdRoutineUseCase)
     private readonly findByIdRoutineUseCase: FindByIdRoutineUseCase,
+    @Inject(FindByTitleRoutineUseCase)
+    private readonly findByTitleRoutineUseCase: FindByTitleRoutineUseCase,
   ) {}
   @Get()
   async findAll(@Req() req: any) {
@@ -31,6 +34,11 @@ export class RoutineController {
   @Get(":id")
   async findById(@Param("id") id: number, @Req() req: any) {
     return await this.findByIdRoutineUseCase.execute(req.user.sub, id);
+  }
+
+  @Get("/find-by-title/:title")
+  async findByTitle(@Param("title") title: string, @Req() req: any) {
+    return await this.findByTitleRoutineUseCase.execute(req.user.sub, title);    
   }
 
   @Post()
