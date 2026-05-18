@@ -4,7 +4,7 @@ import { Routine } from "../entities/routine.entity";
 import { ExistExerciseUseCase } from "src/modules/exercise/core/use-cases/exist-exercise.use-case";
 import { RoutineExercise } from "../entities/routine-exercise.entity";
 
-type CreateRoutineExerciseData = {
+export type CreateRoutineExerciseData = {
   reps: number,
   sets: number,
   order: number,

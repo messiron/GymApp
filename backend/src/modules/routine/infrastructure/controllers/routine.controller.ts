@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Param, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Param, Patch, Post, Req, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AuthAccessTokenGuard } from "src/shared/infrastructure/guards/auth-access-token.guard";
 import { CreateRoutineUseCase } from "../../core/use-cases/create-routine.use-case";
@@ -10,6 +10,8 @@ import { FindAllRoutinesUseCase } from "../../core/use-cases/find-all-routines.u
 import { FindByIdRoutineUseCase } from "../../core/use-cases/find-by-id-routine.use-case";
 import { FindByTitleRoutineUseCase } from "../../core/use-cases/find-by-title-routine.use-case";
 import { GetRoutineExercisesUseCase } from "../../core/use-cases/get-routine-exercises.use-case";
+import { UpdateRoutineUseCase } from "../../core/use-cases/update-routine.use-case";
+import { UpdateRoutineDto } from "../dtos/update-routine.dto";
 
 @ApiTags("routines")
 @ApiBearerAuth()
@@ -28,6 +30,8 @@ export class RoutineController {
     private readonly findByTitleRoutineUseCase: FindByTitleRoutineUseCase,
     @Inject(GetRoutineExercisesUseCase)
     private readonly getRoutineExercisesUseCase: GetRoutineExercisesUseCase,
+    @Inject(UpdateRoutineUseCase)
+    private readonly updateRoutineUseCase: UpdateRoutineUseCase,
   ) {}
   @Get()
   async findAll(@Req() req: any) {
@@ -57,5 +61,21 @@ export class RoutineController {
       userId: req.user.sub,
       routineExercises: data.routineExercises
     });
+  }
+
+  @Patch(":id")
+  async update(
+    @Param("id") id: number,
+    @Body() updateRoutineDto: UpdateRoutineDto,
+    @Req() req: any,
+  ) {
+    return await this.updateRoutineUseCase.execute(
+      id,
+      {
+        title: updateRoutineDto.title,
+        description: updateRoutineDto.description,
+        userId: req.user.sub,
+      },
+    );
   }
 }

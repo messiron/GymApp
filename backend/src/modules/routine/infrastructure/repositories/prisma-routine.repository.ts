@@ -92,17 +92,12 @@ export class PrismaRoutineRepository implements RoutineRepositoryPort {
     }
   }
 
-  async update(routine: Routine, routineExercise: RoutineExercise[]): Promise<void> {
+  async update(routine: Routine): Promise<void> {
     await this.prisma.routine.update({
       where: { id: routine.id },
       data: {
         title: routine.title,
         description: routine.description,
-        exercises: {
-          set: routineExercise.map(v => 
-            this.objectToRoutineExerciseModel(routine.id, v)
-          ),
-        },
       },
     });
   }
@@ -145,21 +140,5 @@ export class PrismaRoutineRepository implements RoutineRepositoryPort {
         routineExercise.weight,
       ),
     }
-  }
-
-  private objectToRoutineExerciseModel(
-    routineId: number,
-    routineExercise: RoutineExercise
-  ): RoutineExerciseModel {
-    return {
-      id: routineExercise.id,
-      reps: routineExercise.reps,
-      order: routineExercise.order,
-      sets: routineExercise.sets,
-      weight: routineExercise.weight,
-      exerciseId: routineExercise.exerciseId,
-      routineId: routineId,
-      createdAt: new Date(),
-    };
   }
 }
