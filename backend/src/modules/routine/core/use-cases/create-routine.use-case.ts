@@ -30,7 +30,7 @@ export class CreateRoutineUseCase {
       await this.existExerciseUseCase.execute(re.exerciseId);
     }
 
-    const routineExercises = await data.routineExercises.map(e => new RoutineExercise(
+    const routineExercises = data.routineExercises.map(e => new RoutineExercise(
       1,
       e.exerciseId,
       e.reps,

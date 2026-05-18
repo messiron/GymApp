@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Post, Req, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AuthAccessTokenGuard } from "src/shared/infrastructure/guards/auth-access-token.guard";
 import { CreateRoutineUseCase } from "../../core/use-cases/create-routine.use-case";
@@ -10,15 +10,13 @@ import { UserRole } from "src/modules/user/core/enums/user-data.enum";
 @ApiTags("routines")
 @ApiBearerAuth()
 @Controller("api/routine")
-@UseGuards(AuthAccessTokenGuard)
+@UseGuards(AuthAccessTokenGuard, RoleGuard)
+@Role(UserRole.USER)
 export class RoutineController {
   constructor(
     @Inject(CreateRoutineUseCase)
     private readonly createRoutineUseCase: CreateRoutineUseCase,
   ) {}
-
-  @UseGuards(RoleGuard)
-  @Role(UserRole.USER)
   @Post()
   async create(@Body() data: CreateRoutineDto, @Req() req: any) {
     return await this.createRoutineUseCase.execute({
