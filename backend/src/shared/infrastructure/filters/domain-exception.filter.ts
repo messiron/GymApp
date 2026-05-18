@@ -8,7 +8,9 @@ import { UserAlreadyExistsError } from "src/modules/user/core/entities/errors/us
 import { UserInvalidEmailError } from "src/modules/user/core/entities/errors/user-invalid-email.error";
 import { UserNotFoundError } from "src/modules/user/core/entities/errors/user-not-found.error";
 import { DomainError } from "src/shared/core/errors/domain.error";
+import { InvalidFileTypeError } from "src/shared/core/errors/invalid-file-type.error";
 import { NotAuthorizedError } from "src/shared/core/errors/not-authorized.error";
+import { VeryLargeFileError } from "src/shared/core/errors/very-large-file.error";
 
 @Catch(DomainError)
 export class DomainExceptionFilter implements ExceptionFilter {
@@ -26,6 +28,8 @@ export class DomainExceptionFilter implements ExceptionFilter {
       [MuscleGroupNotFoundError, HttpStatus.NOT_FOUND],
       [NotAuthorizedError, HttpStatus.FORBIDDEN],
       [ExerciseNotFoundError, HttpStatus.NOT_FOUND],
+      [InvalidFileTypeError, HttpStatus.BAD_REQUEST],
+      [VeryLargeFileError, HttpStatus.BAD_REQUEST],
     ]);
 
     const status = errorMap.get(exception.constructor as any) ?? HttpStatus.INTERNAL_SERVER_ERROR;

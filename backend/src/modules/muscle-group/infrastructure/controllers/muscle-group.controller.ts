@@ -13,6 +13,7 @@ import { UserRole } from "src/modules/user/core/enums/user-data.enum";
 import { Role } from "src/shared/infrastructure/decorators/roles.decorator";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { memoryStorage } from "multer";
+import { ImageValidationPipe } from "src/shared/infrastructure/pipes/image-validation.pipe";
 
 @ApiTags("muscle group")
 @ApiBearerAuth()
@@ -46,7 +47,7 @@ export class MuscleGroupController {
     })
   )
   create(
-    @UploadedFile() img: Express.Multer.File,
+    @UploadedFile(ImageValidationPipe) img: Express.Multer.File,
     @Body() createMuscleGroupDto: CreateMuscleGroupDto
   ) {
     this.createMuscleGroupUseCase.execute(createMuscleGroupDto.name, img);
@@ -69,7 +70,7 @@ export class MuscleGroupController {
   )
   async update(
     @Param("id") id: number,
-    @UploadedFile() img: Express.Multer.File,
+    @UploadedFile(ImageValidationPipe) img: Express.Multer.File,
     @Body() updateMuscleGroupDto: UpdateMuscleGroupDto
   ) {
     return await this.updateMuscleGroupUseCase.execute(

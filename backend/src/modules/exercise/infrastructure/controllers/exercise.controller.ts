@@ -14,6 +14,7 @@ import { UpdateExerciseDto } from "../dtos/update-exercise.dto";
 import { UpdateExerciseUseCase } from "../../core/use-cases/update-exercise.use-case";
 import { RoleGuard } from "src/shared/infrastructure/guards/role.guard";
 import { DeleteExerciseUseCase } from "../../core/use-cases/delete-exercise.use-case";
+import { ImageValidationPipe } from "src/shared/infrastructure/pipes/image-validation.pipe";
 
 @ApiTags("exercise")
 @ApiBearerAuth()
@@ -60,7 +61,7 @@ export class ExerciseController {
   )
   async create(
     @Body() createExerciseDto: createExerciseDto,
-    @UploadedFile() img: Express.Multer.File,
+    @UploadedFile(ImageValidationPipe) img: Express.Multer.File,
   ) {
     await this.createExerciseUseCase.execute({
       name: createExerciseDto.name,
@@ -84,7 +85,7 @@ export class ExerciseController {
   async update(
     @Param("id") id: number,
     @Body() updateExerciseDto: UpdateExerciseDto,
-    @UploadedFile() img: Express.Multer.File,
+    @UploadedFile(ImageValidationPipe) img: Express.Multer.File,
   ) {
     return this.updateExerciseUseCase.execute({
       id,
