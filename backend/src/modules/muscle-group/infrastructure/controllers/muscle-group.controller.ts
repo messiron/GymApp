@@ -14,6 +14,7 @@ import { Role } from "src/shared/infrastructure/decorators/roles.decorator";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { memoryStorage } from "multer";
 import { ImageValidationPipe } from "src/shared/infrastructure/pipes/image-validation.pipe";
+import { FindByIdMuscleGroupUseCase } from "../../core/use-cases/find-by-id-muscle-group.use-case";
 
 @ApiTags("muscle group")
 @ApiBearerAuth()
@@ -30,12 +31,19 @@ export class MuscleGroupController {
     @Inject(UpdateMuscleGroupUseCase)
     private readonly updateMuscleGroupUseCase: UpdateMuscleGroupUseCase,
     @Inject(DeleteMuscleGroupUseCase)
-    private readonly deleteMuscleGroupUseCase: DeleteMuscleGroupUseCase
+    private readonly deleteMuscleGroupUseCase: DeleteMuscleGroupUseCase,
+    @Inject(FindByIdMuscleGroupUseCase)
+    private readonly findByIdMuscleGroupUseCase: FindByIdMuscleGroupUseCase
   ) {}
 
   @Get()
   getAll() {
     return this.findAllMuscleGroupsUseCase.execute();
+  }
+
+  @Get(":id")
+  findById(@Param("id") id: number) {
+    return this.findByIdMuscleGroupUseCase.execute(id);
   }
 
   @UseGuards(RoleGuard)
