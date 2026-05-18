@@ -1,4 +1,26 @@
 import { Module } from "@nestjs/common";
+import { JwtModule } from "@nestjs/jwt";
+import { RoutineRepositoryPort } from "./core/ports/output/routine.repository.port";
+import { PrismaRoutineRepository } from "./infrastructure/repositories/prisma-routine.repository";
+import { ExerciseModule } from "../exercise/exercise.module";
+import { CreateRoutineUseCase } from "./core/use-cases/create-routine.use-case";
+import { RoutineController } from "./infrastructure/controllers/routine.controller";
 
-@Module({})
+@Module({
+  imports: [
+    JwtModule.register({
+      secret: process.env.ACCESS_TOKEN_SECRET,
+      signOptions: {  expiresIn: "15m" },
+    }),
+    ExerciseModule,
+  ],
+  providers: [
+    CreateRoutineUseCase,
+    {
+      provide: RoutineRepositoryPort,
+      useClass: PrismaRoutineRepository,
+    }
+  ],
+  controllers: [RoutineController],
+})
 export class RoutineModule {}

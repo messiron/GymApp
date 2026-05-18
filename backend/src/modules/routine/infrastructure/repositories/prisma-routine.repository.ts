@@ -69,19 +69,27 @@ export class PrismaRoutineRepository implements RoutineRepositoryPort {
   }
 
   async create(routine: Routine, routineExercise: RoutineExercise[]): Promise<void> {
-    await this.prisma.routine.create({
+    const newRoutine = await this.prisma.routine.create({
       data: {
         title: routine.title,
         description: routine.description,
         userId: routine.userId,
         createdAt: routine.createdAt,
-        exercises: {
-          create: routineExercise.map(v => 
-            this.objectToRoutineExerciseModel(routine.id, v)
-          ),
-        }
       }
     });
+
+    for (const re of routineExercise) {
+      await this.prisma.routineExercise.create({
+        data: {
+          reps: re.reps,
+          sets: re.sets,
+          order: re.order,
+          weight: re.weight,
+          exerciseId: re.exerciseId,
+          routineId: newRoutine.id,
+        }
+      });
+    }
   }
 
   async update(routine: Routine, routineExercise: RoutineExercise[]): Promise<void> {

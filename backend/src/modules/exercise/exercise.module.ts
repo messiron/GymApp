@@ -11,6 +11,7 @@ import { FindByIdExerciseUseCase } from './core/use-cases/find-by-id-exercise.us
 import { FindByNameExerciseUseCase } from './core/use-cases/find-by-name-exercise.use-case';
 import { UpdateExerciseUseCase } from './core/use-cases/update-exercise.use-case';
 import { DeleteExerciseUseCase } from './core/use-cases/delete-exercise.use-case';
+import { ExistExerciseUseCase } from './core/use-cases/exist-exercise.use-case';
 
 @Module({
   imports: [
@@ -28,11 +29,15 @@ import { DeleteExerciseUseCase } from './core/use-cases/delete-exercise.use-case
     FindByNameExerciseUseCase,
     UpdateExerciseUseCase,
     DeleteExerciseUseCase,
+    ExistExerciseUseCase,
     {
       provide: ExerciseRepositoryPort,
       useClass: PrismaExerciseRepository,
     },
   ],
   controllers: [ExerciseController],
+  exports: [
+    ExistExerciseUseCase,
+  ],
 })
 export class ExerciseModule {}
