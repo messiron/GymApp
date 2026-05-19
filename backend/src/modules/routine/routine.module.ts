@@ -10,6 +10,10 @@ import { FindByIdRoutineUseCase } from "./core/use-cases/find-by-id-routine.use-
 import { FindByTitleRoutineUseCase } from "./core/use-cases/find-by-title-routine.use-case";
 import { UpdateRoutineUseCase } from "./core/use-cases/update-routine.use-case";
 import { DeleteRoutineUseCase } from "./core/use-cases/delete-routine.use-case";
+import { RoutineExerciseRepositoryPort } from "./core/ports/output/routine-exercise.repository.port";
+import { PrismaRoutineExerciseRepository } from "./infrastructure/repositories/prisma-routine-exercise.repository";
+import { CreateRoutineExerciseUseCase } from "./core/use-cases/create-routine-exercise.use-case";
+import { RoutineExerciseController } from "./infrastructure/controllers/routine-exercise.controller";
 
 @Module({
   imports: [
@@ -26,11 +30,19 @@ import { DeleteRoutineUseCase } from "./core/use-cases/delete-routine.use-case";
     FindByTitleRoutineUseCase,
     UpdateRoutineUseCase,
     DeleteRoutineUseCase,
+    CreateRoutineExerciseUseCase,
     {
       provide: RoutineRepositoryPort,
       useClass: PrismaRoutineRepository,
-    }
+    },
+    {
+      provide: RoutineExerciseRepositoryPort,
+      useClass: PrismaRoutineExerciseRepository,
+    },
   ],
-  controllers: [RoutineController],
+  controllers: [
+    RoutineController,
+    RoutineExerciseController,
+  ],
 })
 export class RoutineModule {}
