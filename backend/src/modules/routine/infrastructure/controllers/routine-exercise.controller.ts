@@ -11,7 +11,7 @@ import { UpdateRoutineExerciseUseCase } from "../../core/use-cases/update-routin
 import { UpdateRoutineExerciseDto } from "../dtos/update-routine-exercise.dto";
 import { DeleteRoutineExerciseUseCase } from "../../core/use-cases/delete-routine-exercise.use-case";
 
-@ApiTags("routines")
+@ApiTags("routine exercises")
 @ApiBearerAuth()
 @Controller("api/routine-exercise")
 @UseGuards(AuthAccessTokenGuard, RoleGuard)
