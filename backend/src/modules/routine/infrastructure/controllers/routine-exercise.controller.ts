@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Param, Patch, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, Req, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { UserRole } from "src/modules/user/core/enums/user-data.enum";
 import { Role } from "src/shared/infrastructure/decorators/roles.decorator";
@@ -9,6 +9,7 @@ import { CreateRoutineExerciseDto } from "../dtos/create-routine-exercise.dto";
 import { FindAllRoutineExercisesUseCase } from "../../core/use-cases/find-all-routine-exercises.use-case";
 import { UpdateRoutineExerciseUseCase } from "../../core/use-cases/update-routine-exercise.use-case";
 import { UpdateRoutineExerciseDto } from "../dtos/update-routine-exercise.dto";
+import { DeleteRoutineExerciseUseCase } from "../../core/use-cases/delete-routine-exercise.use-case";
 
 @ApiTags("routines")
 @ApiBearerAuth()
@@ -23,6 +24,8 @@ export class RoutineExerciseController {
     private readonly findAllRoutineExercisesUseCase: FindAllRoutineExercisesUseCase,
     @Inject(UpdateRoutineExerciseUseCase)
     private readonly updateRoutineExerciseUseCase: UpdateRoutineExerciseUseCase,
+    @Inject(DeleteRoutineExerciseUseCase)
+    private readonly deleteRoutineExerciseUseCase: DeleteRoutineExerciseUseCase,
   ) {}
 
   @Post()
@@ -65,5 +68,10 @@ export class RoutineExerciseController {
         routineId: updateRoutineExerciseDto.routineId,
       }
     );
+  }
+
+  @Delete(":id")
+  async delete(@Param("id") id: number, @Req() req: any) {
+    return await this.deleteRoutineExerciseUseCase.execute(req.user.sub, id);
   }
 }

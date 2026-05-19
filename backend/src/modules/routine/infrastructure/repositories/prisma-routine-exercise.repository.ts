@@ -76,6 +76,7 @@ export class PrismaRoutineExerciseRepository implements RoutineExerciseRepositor
       data: new RoutineExercise(
         routineExercise.id,
         routineExercise.exerciseId,
+        routineExercise.routineId,
         routineExercise.reps,
         routineExercise.sets,
         routineExercise.order,

@@ -30,6 +30,7 @@ export class CreateRoutineExerciseUseCase {
 
     const newRoutineExercise = new RoutineExercise(
       1,
+      0,
       data.exerciseId,
       data.reps,
       data.sets,

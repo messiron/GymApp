@@ -2,6 +2,7 @@ export class RoutineExercise {
   constructor(
     public readonly id: number,
     public readonly exerciseId: number,
+    public readonly routineId: number,
     public readonly reps: number,
     public readonly sets: number,
     public readonly order: number,

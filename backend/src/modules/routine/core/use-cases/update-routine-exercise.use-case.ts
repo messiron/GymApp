@@ -32,6 +32,7 @@ export class UpdateRoutineExerciseUseCase {
     const newData = new RoutineExercise(
       id,
       0,
+      data.routineId,
       data.reps,
       data.sets,
       data.order,
