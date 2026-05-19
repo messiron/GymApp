@@ -73,12 +73,14 @@ export class PrismaRoutineExerciseRepository implements RoutineExerciseRepositor
         exercise.createdAt,
         exercise.updatedAt
       ),
-      data: {
-        reps: routineExercise.reps,
-        sets: routineExercise.sets,
-        order: routineExercise.order,
-        weight: routineExercise.weight,
-      }
+      data: new RoutineExercise(
+        routineExercise.id,
+        routineExercise.exerciseId,
+        routineExercise.reps,
+        routineExercise.sets,
+        routineExercise.order,
+        routineExercise.weight,
+      ),
     }
   }
 }

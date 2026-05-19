@@ -4,6 +4,7 @@ import { InvalidTokenError } from "src/modules/auth/core/entities/errors/invalid
 import { TokenExpiredError } from "src/modules/auth/core/entities/errors/token-expired.error";
 import { ExerciseNotFoundError } from "src/modules/exercise/core/entities/errors/Exercise-not-found.error";
 import { MuscleGroupNotFoundError } from "src/modules/muscle-group/core/entities/errors/muscle-group-not-found.error";
+import { RoutineExerciseNotFoundError } from "src/modules/routine/core/entities/errors/routine-exercise-not-found.error";
 import { RoutineNotFoundError } from "src/modules/routine/core/entities/errors/routine-not-found.error";
 import { UserAlreadyExistsError } from "src/modules/user/core/entities/errors/user-already-exists.error";
 import { UserInvalidEmailError } from "src/modules/user/core/entities/errors/user-invalid-email.error";
@@ -32,6 +33,7 @@ export class DomainExceptionFilter implements ExceptionFilter {
       [InvalidFileTypeError, HttpStatus.BAD_REQUEST],
       [VeryLargeFileError, HttpStatus.BAD_REQUEST],
       [RoutineNotFoundError, HttpStatus.NOT_FOUND],
+      [RoutineExerciseNotFoundError, HttpStatus.BAD_REQUEST],
     ]);
 
     const status = errorMap.get(exception.constructor as any) ?? HttpStatus.INTERNAL_SERVER_ERROR;

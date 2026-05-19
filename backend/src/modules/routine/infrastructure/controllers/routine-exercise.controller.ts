@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Param, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Param, Patch, Post, Req, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { UserRole } from "src/modules/user/core/enums/user-data.enum";
 import { Role } from "src/shared/infrastructure/decorators/roles.decorator";
@@ -7,6 +7,8 @@ import { RoleGuard } from "src/shared/infrastructure/guards/role.guard";
 import { CreateRoutineExerciseUseCase } from "../../core/use-cases/create-routine-exercise.use-case";
 import { CreateRoutineExerciseDto } from "../dtos/create-routine-exercise.dto";
 import { FindAllRoutineExercisesUseCase } from "../../core/use-cases/find-all-routine-exercises.use-case";
+import { UpdateRoutineExerciseUseCase } from "../../core/use-cases/update-routine-exercise.use-case";
+import { UpdateRoutineExerciseDto } from "../dtos/update-routine-exercise.dto";
 
 @ApiTags("routines")
 @ApiBearerAuth()
@@ -19,6 +21,8 @@ export class RoutineExerciseController {
     private readonly createRoutineExerciseUseCase: CreateRoutineExerciseUseCase,
     @Inject(FindAllRoutineExercisesUseCase)
     private readonly findAllRoutineExercisesUseCase: FindAllRoutineExercisesUseCase,
+    @Inject(UpdateRoutineExerciseUseCase)
+    private readonly updateRoutineExerciseUseCase: UpdateRoutineExerciseUseCase,
   ) {}
 
   @Post()
@@ -40,7 +44,26 @@ export class RoutineExerciseController {
   }
 
   @Get(":routineId")
-  findAll(@Param("routineId") routineId: number, @Req() req: any) {
-    return this.findAllRoutineExercisesUseCase.execute(req.user.sub, routineId);
+  async findAll(@Param("routineId") routineId: number, @Req() req: any) {
+    return await this.findAllRoutineExercisesUseCase.execute(req.user.sub, routineId);
+  }
+
+  @Patch(":id")
+  async update(
+    @Param("id") id: number,
+    @Body() updateRoutineExerciseDto: UpdateRoutineExerciseDto,
+    @Req() req: any,
+  ) {
+    return await this.updateRoutineExerciseUseCase.execute(
+      req.user.sub,
+      id,
+      {
+        reps: updateRoutineExerciseDto.reps,
+        sets: updateRoutineExerciseDto.sets,
+        order: updateRoutineExerciseDto.order,
+        weight: updateRoutineExerciseDto.weight,
+        routineId: updateRoutineExerciseDto.routineId,
+      }
+    );
   }
 }

@@ -3,12 +3,7 @@ import { RoutineExercise } from "../../entities/routine-exercise.entity";
 
 export type RoutineExerciseResponse = {
   exercise: Exercise,
-  data: {
-    reps: number,
-    sets: number,
-    order: number,
-    weight: number | null,
-  }
+  data: RoutineExercise,
 }
 
 export abstract class RoutineExerciseRepositoryPort {
