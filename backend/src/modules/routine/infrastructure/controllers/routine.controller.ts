@@ -9,7 +9,6 @@ import { UserRole } from "src/modules/user/core/enums/user-data.enum";
 import { FindAllRoutinesUseCase } from "../../core/use-cases/find-all-routines.use-case";
 import { FindByIdRoutineUseCase } from "../../core/use-cases/find-by-id-routine.use-case";
 import { FindByTitleRoutineUseCase } from "../../core/use-cases/find-by-title-routine.use-case";
-import { GetRoutineExercisesUseCase } from "../../core/use-cases/get-routine-exercises.use-case";
 import { UpdateRoutineUseCase } from "../../core/use-cases/update-routine.use-case";
 import { UpdateRoutineDto } from "../dtos/update-routine.dto";
 import { DeleteRoutineUseCase } from "../../core/use-cases/delete-routine.use-case";
@@ -29,8 +28,6 @@ export class RoutineController {
     private readonly findByIdRoutineUseCase: FindByIdRoutineUseCase,
     @Inject(FindByTitleRoutineUseCase)
     private readonly findByTitleRoutineUseCase: FindByTitleRoutineUseCase,
-    @Inject(GetRoutineExercisesUseCase)
-    private readonly getRoutineExercisesUseCase: GetRoutineExercisesUseCase,
     @Inject(UpdateRoutineUseCase)
     private readonly updateRoutineUseCase: UpdateRoutineUseCase,
     @Inject(DeleteRoutineUseCase)
@@ -49,11 +46,6 @@ export class RoutineController {
   @Get("/find-by-title/:title")
   async findByTitle(@Param("title") title: string, @Req() req: any) {
     return await this.findByTitleRoutineUseCase.execute(req.user.sub, title);    
-  }
-
-  @Get("/exercises/:id")
-  async getExercises(@Param("id") id: number, @Req() req : any) {
-    return await this.getRoutineExercisesUseCase.execute(req.user.sub, id);
   }
 
   @Post()

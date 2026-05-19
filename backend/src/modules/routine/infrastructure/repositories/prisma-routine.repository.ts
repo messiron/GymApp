@@ -1,12 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { RoutineExerciseResponse, RoutineRepositoryPort } from "../../core/ports/output/routine.repository.port";
 import { PrismaService } from "src/shared/infrastructure/prisma/prisma.service";
 import { Routine } from "../../core/entities/routine.entity";
 import { Routine as RoutineModel } from "@prisma/client";
-import { RoutineExercise as RoutineExerciseModel } from "@prisma/client";
-import { RoutineExercise } from "../../core/entities/routine-exercise.entity";
-import { Exercise } from "src/modules/exercise/core/entities/exercise.entity";
-import { Exercise as ExerciseModel } from "@prisma/client";
+import { RoutineRepositoryPort } from "../../core/ports/output/routine.repository.port";
 
 @Injectable()
 export class PrismaRoutineRepository implements RoutineRepositoryPort {
@@ -44,28 +40,6 @@ export class PrismaRoutineRepository implements RoutineRepositoryPort {
     });
 
     return routines.map(r => this.modelToRoutine(r));
-  }
-
-  async getExercises(userId: string, id: number): Promise<RoutineExerciseResponse[]> {
-    const routineExercise = await this.prisma.routineExercise.findMany({
-      where: {
-        routineId: id,
-        AND: {
-          routines: {
-            userId
-          },
-        },
-      },
-      include: {
-        exercises: true,
-      },
-    });
-
-    return routineExercise.map(v => {
-      const { exercises, ...routineExercise } = v;
-      
-      return this.modelToResponse(exercises, routineExercise);
-    });
   }
 
   async create(routine: Routine): Promise<void> {
@@ -109,30 +83,5 @@ export class PrismaRoutineRepository implements RoutineRepositoryPort {
       model.createdAt,
       model.updatedAt,
     );
-  }
-
-  private modelToResponse(
-    exercise: ExerciseModel,
-    routineExercise: RoutineExerciseModel
-  ): RoutineExerciseResponse {
-    return {
-      exercise: new Exercise(
-        exercise.id,
-        exercise.name,
-        exercise.description,
-        exercise.example_gif,
-        exercise.timeForRep,
-        exercise.createdAt,
-        exercise.updatedAt,
-      ),
-      data: new RoutineExercise(
-        routineExercise.id,
-        routineExercise.exerciseId,
-        routineExercise.reps,
-        routineExercise.sets,
-        routineExercise.order,
-        routineExercise.weight,
-      ),
-    }
   }
 }
