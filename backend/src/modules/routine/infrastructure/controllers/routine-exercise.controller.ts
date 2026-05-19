@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Param, Post, Req, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { UserRole } from "src/modules/user/core/enums/user-data.enum";
 import { Role } from "src/shared/infrastructure/decorators/roles.decorator";
@@ -6,6 +6,7 @@ import { AuthAccessTokenGuard } from "src/shared/infrastructure/guards/auth-acce
 import { RoleGuard } from "src/shared/infrastructure/guards/role.guard";
 import { CreateRoutineExerciseUseCase } from "../../core/use-cases/create-routine-exercise.use-case";
 import { CreateRoutineExerciseDto } from "../dtos/create-routine-exercise.dto";
+import { FindAllRoutineExercisesUseCase } from "../../core/use-cases/find-all-routine-exercises.use-case";
 
 @ApiTags("routines")
 @ApiBearerAuth()
@@ -16,6 +17,8 @@ export class RoutineExerciseController {
   constructor(
     @Inject(CreateRoutineExerciseUseCase)
     private readonly createRoutineExerciseUseCase: CreateRoutineExerciseUseCase,
+    @Inject(FindAllRoutineExercisesUseCase)
+    private readonly findAllRoutineExercisesUseCase: FindAllRoutineExercisesUseCase,
   ) {}
 
   @Post()
@@ -34,5 +37,10 @@ export class RoutineExerciseController {
         exerciseId: createRoutineExerciseDto.exerciseId,
       },
     );
+  }
+
+  @Get(":routineId")
+  findAll(@Param("routineId") routineId: number, @Req() req: any) {
+    return this.findAllRoutineExercisesUseCase.execute(req.user.sub, routineId);
   }
 }

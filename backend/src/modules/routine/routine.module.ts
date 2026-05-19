@@ -14,6 +14,7 @@ import { RoutineExerciseRepositoryPort } from "./core/ports/output/routine-exerc
 import { PrismaRoutineExerciseRepository } from "./infrastructure/repositories/prisma-routine-exercise.repository";
 import { CreateRoutineExerciseUseCase } from "./core/use-cases/create-routine-exercise.use-case";
 import { RoutineExerciseController } from "./infrastructure/controllers/routine-exercise.controller";
+import { FindAllRoutineExercisesUseCase } from "./core/use-cases/find-all-routine-exercises.use-case";
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { RoutineExerciseController } from "./infrastructure/controllers/routine-
     UpdateRoutineUseCase,
     DeleteRoutineUseCase,
     CreateRoutineExerciseUseCase,
+    FindAllRoutineExercisesUseCase,
     {
       provide: RoutineRepositoryPort,
       useClass: PrismaRoutineRepository,
