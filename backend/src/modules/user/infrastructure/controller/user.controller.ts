@@ -3,6 +3,7 @@ import { UpdateUserDto } from "../dtos/update-user.dto";
 import { UpdateUserDataUseCase } from "../../core/use-cases/update-user-data.use-case";
 import { AuthAccessTokenGuard } from "src/shared/infrastructure/guards/auth-access-token.guard";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import type { RequestWithUser } from "src/shared/infrastructure/types/request-with-user";
 
 @ApiTags("user")
 @Controller("api/user")
@@ -14,7 +15,7 @@ export class UserController {
   @Patch()
   @ApiBearerAuth()
   @UseGuards(AuthAccessTokenGuard)
-  update(@Req() req, @Body() updateUserDto: UpdateUserDto) {
+  update(@Req() req: RequestWithUser, @Body() updateUserDto: UpdateUserDto) {
     return this.updateUserDataUseCase.execute({
       id: req.user.sub,
       firstName: updateUserDto.firstName,

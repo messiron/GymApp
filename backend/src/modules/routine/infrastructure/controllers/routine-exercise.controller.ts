@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { UserRole } from "src/modules/user/core/enums/user-data.enum";
 import { Role } from "src/shared/infrastructure/decorators/roles.decorator";
@@ -10,6 +10,7 @@ import { FindAllRoutineExercisesUseCase } from "../../core/use-cases/find-all-ro
 import { UpdateRoutineExerciseUseCase } from "../../core/use-cases/update-routine-exercise.use-case";
 import { UpdateRoutineExerciseDto } from "../dtos/update-routine-exercise.dto";
 import { DeleteRoutineExerciseUseCase } from "../../core/use-cases/delete-routine-exercise.use-case";
+import type { RequestWithUser } from "src/shared/infrastructure/types/request-with-user";
 
 @ApiTags("routine exercises")
 @ApiBearerAuth()
@@ -18,20 +19,16 @@ import { DeleteRoutineExerciseUseCase } from "../../core/use-cases/delete-routin
 @Role(UserRole.USER)
 export class RoutineExerciseController {
   constructor(
-    @Inject(CreateRoutineExerciseUseCase)
     private readonly createRoutineExerciseUseCase: CreateRoutineExerciseUseCase,
-    @Inject(FindAllRoutineExercisesUseCase)
     private readonly findAllRoutineExercisesUseCase: FindAllRoutineExercisesUseCase,
-    @Inject(UpdateRoutineExerciseUseCase)
     private readonly updateRoutineExerciseUseCase: UpdateRoutineExerciseUseCase,
-    @Inject(DeleteRoutineExerciseUseCase)
     private readonly deleteRoutineExerciseUseCase: DeleteRoutineExerciseUseCase,
   ) {}
 
   @Post()
   async create(
     @Body() createRoutineExerciseDto: CreateRoutineExerciseDto,
-    @Req() req: any,
+    @Req() req: RequestWithUser,
   ) {
     return await this.createRoutineExerciseUseCase.execute(
       req.user.sub,
@@ -47,7 +44,7 @@ export class RoutineExerciseController {
   }
 
   @Get(":routineId")
-  async findAll(@Param("routineId") routineId: number, @Req() req: any) {
+  async findAll(@Param("routineId") routineId: number, @Req() req: RequestWithUser) {
     return await this.findAllRoutineExercisesUseCase.execute(req.user.sub, routineId);
   }
 
@@ -55,7 +52,7 @@ export class RoutineExerciseController {
   async update(
     @Param("id") id: number,
     @Body() updateRoutineExerciseDto: UpdateRoutineExerciseDto,
-    @Req() req: any,
+    @Req() req: RequestWithUser,
   ) {
     return await this.updateRoutineExerciseUseCase.execute(
       req.user.sub,
@@ -71,7 +68,7 @@ export class RoutineExerciseController {
   }
 
   @Delete(":id")
-  async delete(@Param("id") id: number, @Req() req: any) {
+  async delete(@Param("id") id: number, @Req() req: RequestWithUser) {
     return await this.deleteRoutineExerciseUseCase.execute(req.user.sub, id);
   }
 }

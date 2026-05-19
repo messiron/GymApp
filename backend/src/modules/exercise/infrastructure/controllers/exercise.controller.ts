@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, FileTypeValidator, Get, Inject, MaxFileSizeValidator, Param, ParseFilePipe, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AuthAccessTokenGuard } from "src/shared/infrastructure/guards/auth-access-token.guard";
 import { CreateExercisesUseCase } from "../../core/use-cases/create-exercise.use-case";
@@ -22,17 +22,11 @@ import { ImageValidationPipe } from "src/shared/infrastructure/pipes/image-valid
 @UseGuards(AuthAccessTokenGuard)
 export class ExerciseController {
   constructor(
-    @Inject(CreateExercisesUseCase)
     private readonly createExerciseUseCase: CreateExercisesUseCase,
-    @Inject(FindAllExerciseUseCase)
     private readonly findAllExerciseUseCase: FindAllExerciseUseCase,
-    @Inject(FindByIdExerciseUseCase)
     private readonly findByIdExerciseUseCase: FindByIdExerciseUseCase,
-    @Inject(FindByNameExerciseUseCase)
     private readonly findByNameExerciseUseCase: FindByNameExerciseUseCase,
-    @Inject(UpdateExerciseUseCase)
     private readonly updateExerciseUseCase: UpdateExerciseUseCase,
-    @Inject(DeleteExerciseUseCase)
     private readonly deleteExerciseUseCase: DeleteExerciseUseCase,
   ) {}
 

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { CreateMuscleGroupUseCase } from "../../core/use-cases/create-muscle-group.use-case";
 import { FindAllMuscleGroupsUseCase } from "../../core/use-cases/find-all-muscle-groups.use-case";
@@ -22,17 +22,11 @@ import { FindByIdMuscleGroupUseCase } from "../../core/use-cases/find-by-id-musc
 @UseGuards(AuthAccessTokenGuard)
 export class MuscleGroupController {
   constructor(
-    @Inject(CreateMuscleGroupUseCase)
     private readonly createMuscleGroupUseCase: CreateMuscleGroupUseCase,
-    @Inject(FindAllMuscleGroupsUseCase)
     private readonly findAllMuscleGroupsUseCase: FindAllMuscleGroupsUseCase,
-    @Inject(FindByNameMuscleGroupUseCase)
     private readonly findByNameMuscleGroupUseCase: FindByNameMuscleGroupUseCase,
-    @Inject(UpdateMuscleGroupUseCase)
     private readonly updateMuscleGroupUseCase: UpdateMuscleGroupUseCase,
-    @Inject(DeleteMuscleGroupUseCase)
     private readonly deleteMuscleGroupUseCase: DeleteMuscleGroupUseCase,
-    @Inject(FindByIdMuscleGroupUseCase)
     private readonly findByIdMuscleGroupUseCase: FindByIdMuscleGroupUseCase
   ) {}
 
