@@ -7,6 +7,8 @@ import { AuthAccessTokenGuard } from "src/shared/infrastructure/guards/auth-acce
 import { FindUserUseCase } from "src/modules/user/core/use-cases/find-user.use-case";
 import { GenerateTokensUseCase } from "../../core/use-cases/generate-tokens.use-case";
 import { ApiBearerAuth, ApiTags, ApiBody } from "@nestjs/swagger";
+import type { RequestWithUser } from "src/shared/infrastructure/types/request-with-user";
+import type { RequestWithEmail } from "../types/request-with-email";
 
 @ApiTags("auth")
 @Controller("api/auth")
@@ -41,9 +43,8 @@ export class AuthController {
     }
   })
   @UseGuards(AuthGuard("email-code"))
-  async loginWithEmail(@Req() req) {
-    const email: string = req.user;
-    //console.log(email, typeof email)
+  async loginWithEmail(@Req() req: RequestWithEmail) {
+    const email = req.user;
     return await this.loginWithEmailUseCase.execute(email);
   }
 
@@ -61,15 +62,15 @@ export class AuthController {
     }
   })
   @UseGuards(AuthGuard("refresh-token"))
-  async refreshToken(@Req() req) {
+  async refreshToken(@Req() req: RequestWithUser) {
     const data = req.user;
-    return await this.generateTokensUseCase.execute(data.id, data.email, data.role);
+    return await this.generateTokensUseCase.execute(data.sub, data.email, data.role);
   }
 
   @Get("profile")
   @ApiBearerAuth()
   @UseGuards(AuthAccessTokenGuard)
-  async getProfile(@Req() req) {
+  async getProfile(@Req() req: RequestWithUser) {
     return await this.findUserUseCase.execute(req.user.sub);
   }
 
