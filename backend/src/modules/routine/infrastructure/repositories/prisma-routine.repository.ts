@@ -89,8 +89,15 @@ export class PrismaRoutineRepository implements RoutineRepositoryPort {
     });
   }
 
-  async delete(id: number): Promise<void> {
-    await this.prisma.routine.delete({ where: { id } });
+  async delete(userId: string, id: number): Promise<void> {
+    await this.prisma.routine.delete({
+      where: {
+        id,
+        AND: {
+          userId
+        }
+      }
+    });
   }
 
   private modelToRoutine(model: RoutineModel): Routine {

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Param, Patch, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, Req, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AuthAccessTokenGuard } from "src/shared/infrastructure/guards/auth-access-token.guard";
 import { CreateRoutineUseCase } from "../../core/use-cases/create-routine.use-case";
@@ -12,6 +12,7 @@ import { FindByTitleRoutineUseCase } from "../../core/use-cases/find-by-title-ro
 import { GetRoutineExercisesUseCase } from "../../core/use-cases/get-routine-exercises.use-case";
 import { UpdateRoutineUseCase } from "../../core/use-cases/update-routine.use-case";
 import { UpdateRoutineDto } from "../dtos/update-routine.dto";
+import { DeleteRoutineUseCase } from "../../core/use-cases/delete-routine.use-case";
 
 @ApiTags("routines")
 @ApiBearerAuth()
@@ -32,6 +33,8 @@ export class RoutineController {
     private readonly getRoutineExercisesUseCase: GetRoutineExercisesUseCase,
     @Inject(UpdateRoutineUseCase)
     private readonly updateRoutineUseCase: UpdateRoutineUseCase,
+    @Inject(DeleteRoutineUseCase)
+    private readonly deleteRoutineUseCase: DeleteRoutineUseCase,
   ) {}
   @Get()
   async findAll(@Req() req: any) {
@@ -76,5 +79,10 @@ export class RoutineController {
         userId: req.user.sub,
       },
     );
+  }
+
+  @Delete(":id")
+  async delete(@Param("id") id: number, @Req() req: any) {
+    return await this.deleteRoutineUseCase.execute(req.user.sub, id);
   }
 }

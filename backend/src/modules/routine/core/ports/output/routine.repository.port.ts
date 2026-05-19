@@ -14,5 +14,5 @@ export abstract class RoutineRepositoryPort {
   abstract getExercises(userId: string, id: number): Promise<RoutineExerciseResponse[]>;
   abstract create(routine: Routine): Promise<void>;
   abstract update(routine: Routine): Promise<void>;
-  abstract delete(id: number): Promise<void>;
+  abstract delete(userId: string, id: number): Promise<void>;
 }
