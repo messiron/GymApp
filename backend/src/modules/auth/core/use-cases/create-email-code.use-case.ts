@@ -1,12 +1,14 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { EmailCode } from "../entities/email-code.entity";
 import { EmailCodeRepositoryPort } from "../ports/output/email-code-repository.port";
+import { EmailSenderPort } from "src/shared/core/ports/email-sender.port";
 
-// @Injectable()
 export class CreateEmailCodeUseCase {
   constructor(
     @Inject(EmailCodeRepositoryPort)
-    private readonly emailCodeRepository: EmailCodeRepositoryPort
+    private readonly emailCodeRepository: EmailCodeRepositoryPort,
+    @Inject(EmailSenderPort)
+    private readonly emailSender: EmailSenderPort,
   ) {}
 
   async execute(email: string) {
@@ -22,7 +24,16 @@ export class CreateEmailCodeUseCase {
       new Date()
     );
 
-    console.log("➡️  Code to login:", code);
+    this.emailSender.send({
+      to: email,
+      subject: "Verification code",
+      html: `
+        <h1>Your code</h1>
+        <p>${code}</p>
+        <p>This code expires in 2 minutes.</p>
+      `,
+    });
+    console.log(code);
     await this.emailCodeRepository.create(newEmailCode);
     return {
       message: "Code sent to email.",

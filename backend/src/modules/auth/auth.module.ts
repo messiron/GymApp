@@ -13,6 +13,7 @@ import { GenerateTokensUseCase } from "./core/use-cases/generate-tokens.use-case
 import { JwtModule } from "@nestjs/jwt";
 import { RefreshTokenStrategy } from "./infrastructure/strategies/refresh-token.strategy";
 import { ValidateRefreshTokenUseCase } from "./core/use-cases/validate-refresh-token.use-case";
+import { EmailModule } from "src/shared/infrastructure/email/email.module";
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ValidateRefreshTokenUseCase } from "./core/use-cases/validate-refresh-t
       secret: process.env.REFRESH_TOKEN_SECRET,
       signOptions: { expiresIn: "7d" },
     }),
+    EmailModule,
   ],
   controllers: [AuthController],
   providers: [
