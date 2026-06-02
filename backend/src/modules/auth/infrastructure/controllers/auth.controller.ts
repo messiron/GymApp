@@ -21,8 +21,8 @@ export class AuthController {
   ) {}
 
   @Post("send-code")
-  sendCodeToEmail(@Body() emailDto: EmailDto) {
-    return this.createEmailCodeUseCase.execute(emailDto.email);
+  async sendCodeToEmail(@Body() emailDto: EmailDto) {
+    return await this.createEmailCodeUseCase.execute(emailDto.email);
   }
 
   @Post("login")

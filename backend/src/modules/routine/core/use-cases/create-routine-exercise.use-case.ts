@@ -30,12 +30,12 @@ export class CreateRoutineExerciseUseCase {
 
     const newRoutineExercise = new RoutineExercise(
       1,
-      0,
       data.exerciseId,
+      routineId,
       data.reps,
       data.sets,
       data.order,
-      data.weight,
+      data.weight
     );
 
     await this.routineExerciseRepository.create(routineId, newRoutineExercise);

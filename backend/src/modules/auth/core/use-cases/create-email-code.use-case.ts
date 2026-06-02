@@ -24,7 +24,8 @@ export class CreateEmailCodeUseCase {
       new Date()
     );
 
-    this.emailSender.send({
+    // use email service
+    /*await this.emailSender.send({
       to: email,
       subject: "Verification code",
       html: `
@@ -32,7 +33,7 @@ export class CreateEmailCodeUseCase {
         <p>${code}</p>
         <p>This code expires in 2 minutes.</p>
       `,
-    });
+    });*/
     console.log(code);
     await this.emailCodeRepository.create(newEmailCode);
     return {
